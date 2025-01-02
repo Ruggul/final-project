@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('factory_documents', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('document_type');
             $table->string('document_name');
             $table->string('file_path');
             $table->date('expiry_date')->nullable();
-            $table->boolean('is_verified')->default(false);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('factory_documents');
+        Schema::dropIfExists('documents');
     }
 };
