@@ -11,7 +11,6 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->integer('rating')->comment('1-5 stars');
@@ -22,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Memastikan user hanya bisa memberikan satu ulasan per produk per order
-            $table->unique(['user_id', 'product_id', 'order_id']);
+            $table->unique(['product_id', 'order_id']);
         });
     }
 
