@@ -149,21 +149,12 @@
                                         <th class="px-6 py-3 text-left">ID</th>
                                         <th class="px-6 py-3 text-left">Nama</th>
                                         <th class="px-6 py-3 text-left">Email</th>
-                                        <th class="px-6 py-3 text-left">Status</th>
+                                        <th class="px-6 py-3 text-left">Role</th>
                                         <th class="px-6 py-3 text-left">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="border-b">
-                                        <td class="px-6 py-4">#001</td>
-                                        <td class="px-6 py-4">John Doe</td>
-                                        <td class="px-6 py-4">john@example.com</td>
-                                        <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full">Aktif</span></td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-blue-500 hover:text-blue-700 mr-2">Edit</button>
-                                            <button class="text-red-500 hover:text-red-700">Hapus</button>
-                                        </td>
-                                    </tr>
+                                <tbody id="usersTableBody">
+                                    <!-- Data akan diisi melalui JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -252,6 +243,61 @@
 
         // Show selected content
         document.getElementById(contentId + '-content').classList.remove('hidden');
+
+        // Jika memilih menu users, load data users
+        if(contentId === 'users') {
+            loadUsers();
+        }
+    }
+
+    function loadUsers() {
+        fetch('/admin/users')
+            .then(response => response.json())
+            .then(users => {
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+                
+                users.forEach(user => {
+                    let roleSpan = '';
+                    switch(user.usertype) {
+                        case '0':
+                            roleSpan = '<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">User</span>';
+                            break;
+                        case '1':
+                            roleSpan = '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full">Admin</span>';
+                            break;
+                        case '2':
+                            roleSpan = '<span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">Factory</span>';
+                            break;
+                    }
+
+                    tbody.innerHTML += `
+                        <tr class="border-b">
+                            <td class="px-6 py-4">#${user.id}</td>
+                            <td class="px-6 py-4">${user.name}</td>
+                            <td class="px-6 py-4">${user.email}</td>
+                            <td class="px-6 py-4">${roleSpan}</td>
+                            <td class="px-6 py-4">
+                                <button class="text-blue-500 hover:text-blue-700 mr-2" onclick="editUser(${user.id})">Edit</button>
+                                <button class="text-red-500 hover:text-red-700" onclick="deleteUser(${user.id})">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function editUser(id) {
+        // Implementasi edit user
+        console.log('Edit user:', id);
+    }
+
+    function deleteUser(id) {
+        if(confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+            // Implementasi delete user
+            console.log('Delete user:', id);
+        }
     }
     </script>
 </body>
