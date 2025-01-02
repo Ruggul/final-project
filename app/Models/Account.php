@@ -33,9 +33,27 @@ class Account extends Authenticatable
         'password' => 'hashed',
     ];
 
-    //Mengenkripsi password sebelum disimpan
-    public function setPasswordAttribute($value)
+    //Relasi ke PaymentMethod
+    public function paymentMethods()
     {
-        $this->attributes['password'] = bcrypt($value);
+        return $this->hasMany(PaymentMethod::class);
+    }
+
+    //Relasi ke Document
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    //Scope untuk mencari berdasarkan email
+    public function scopeByEmail($query, $email)
+    {
+        return $query->where('email', $email);
+    }
+
+    //Scope untuk mencari berdasarkan username
+    public function scopeByUsername($query, $username)
+    {
+        return $query->where('username', $username);
     }
 }
