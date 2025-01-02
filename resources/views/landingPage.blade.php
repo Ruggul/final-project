@@ -6,8 +6,6 @@
     <title>Landing Page</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
@@ -24,28 +22,11 @@
                     </div>
                 </div>
                 <!-- Login / Register -->
-                <div class="hidden md:flex items-center space-x-3">
-                    <a href="#" class="py-2 px-4 font-medium text-gray-500 hover:text-blue-500 transition duration-300">Login</a>
-                    <a href="#" class="py-2 px-4 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300">Register</a>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button class="outline-none mobile-menu-button">
-                        <i class="fas fa-bars text-gray-500 text-lg"></i>
-                    </button>
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('login') }}" class="py-2 px-4 font-medium text-gray-500 hover:text-blue-500 transition duration-300">Login</a>
+                    <a href="{{ route('register') }}" class="py-2 px-4 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300">Register</a>
                 </div>
             </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div class="hidden mobile-menu md:hidden">
-            <ul class="px-4">
-                <li><a href="#" class="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold">Home</a></li>
-                <li><a href="#" class="block text-sm px-2 py-4 hover:bg-blue-500 hover:text-white transition duration-300">About</a></li>
-                <li><a href="#" class="block text-sm px-2 py-4 hover:bg-blue-500 hover:text-white transition duration-300">Services</a></li>
-                <li><a href="#" class="block text-sm px-2 py-4 hover:bg-blue-500 hover:text-white transition duration-300">Contact</a></li>
-                <li><a href="#" class="block text-sm px-2 py-4 hover:bg-blue-500 hover:text-white transition duration-300">Login</a></li>
-                <li><a href="#" class="block text-sm px-2 py-4 hover:bg-blue-500 hover:text-white transition duration-300">Register</a></li>
-            </ul>
         </div>
     </nav>
 
@@ -61,15 +42,5 @@
             </div>
         </div>
     </div>
-
-    <!-- JavaScript untuk Mobile Menu -->
-    <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
-
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
-    </script>
 </body>
 </html>
