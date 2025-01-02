@@ -13,8 +13,9 @@ use App\Http\Controllers\HomeController;
 |
 */
 
+// base code
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingPage');
 });
 
 Route::middleware([
@@ -26,8 +27,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+// rayhan
 Route::get('/redirect',[HomeController::class,'redirect']); 
 
+
+//dhafin
 use App\Http\Controllers\userCartManagement\CartController;
 
 Route::prefix('keranjang')->group(function () {
