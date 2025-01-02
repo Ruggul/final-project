@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <h2 class="text-gray-600">Total Users</h2>
-                                    <p class="text-2xl font-semibold">1,250</p>
+                                    <p class="text-2xl font-semibold" id="totalUsers">Loading...</p>
                                 </div>
                             </div>
                         </div>
@@ -149,8 +149,7 @@
                                         <th class="px-6 py-3 text-left">ID</th>
                                         <th class="px-6 py-3 text-left">Nama</th>
                                         <th class="px-6 py-3 text-left">Email</th>
-                                        <th class="px-6 py-3 text-left">Role</th>
-                                        <th class="px-6 py-3 text-left">Aksi</th>
+                                        <th class="px-6 py-3 text-center">Role</th>
                                     </tr>
                                 </thead>
                                 <tbody id="usersTableBody">
@@ -248,6 +247,10 @@
         if(contentId === 'users') {
             loadUsers();
         }
+
+        if(contentId === 'overview') {
+            loadTotalUsers();
+        }
     }
 
     function loadUsers() {
@@ -276,11 +279,7 @@
                             <td class="px-6 py-4">#${user.id}</td>
                             <td class="px-6 py-4">${user.name}</td>
                             <td class="px-6 py-4">${user.email}</td>
-                            <td class="px-6 py-4">${roleSpan}</td>
-                            <td class="px-6 py-4">
-                                <button class="text-blue-500 hover:text-blue-700 mr-2" onclick="editUser(${user.id})">Edit</button>
-                                <button class="text-red-500 hover:text-red-700" onclick="deleteUser(${user.id})">Hapus</button>
-                            </td>
+                            <td class="px-6 py-4 text-center">${roleSpan}</td>
                         </tr>
                     `;
                 });
@@ -288,17 +287,19 @@
             .catch(error => console.error('Error:', error));
     }
 
-    function editUser(id) {
-        // Implementasi edit user
-        console.log('Edit user:', id);
+    function loadTotalUsers() {
+        fetch('/admin/total-users')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalUsers').textContent = data.total;
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    function deleteUser(id) {
-        if(confirm('Apakah Anda yakin ingin menghapus user ini?')) {
-            // Implementasi delete user
-            console.log('Delete user:', id);
-        }
-    }
+    // Load total users saat halaman pertama kali dibuka
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTotalUsers();
+    });
     </script>
 </body>
 </html>

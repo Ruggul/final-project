@@ -33,9 +33,11 @@ Route::middleware([
 // rayhan
 Route::get('/redirect',[HomeController::class,'redirect']);
 
-Route::get('/admin/home', [AdminController::class, 'index'])->name('admin.home');
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
 Route::get('/admin/users', [AdminController::class, 'getUsers'])->name('admin.users');
+
+Route::get('/admin/total-users', [AdminController::class, 'getTotalUsers'])->name('admin.total-users');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -56,5 +58,7 @@ Route::prefix('keranjang')->group(function () {
     Route::get('/total/{id_pengguna}', [CartController::class, 'calculateTotal']); // Menghitung total harga
     Route::put('/keranjang/perbarui', [CartController::class, 'updateQuantity']); // Memperbarui kuantitas produk
 });
+
+
 
 
