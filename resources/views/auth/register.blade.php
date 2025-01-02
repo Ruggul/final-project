@@ -12,6 +12,7 @@
             <div>
                 <x-label for="name" value="{{ __('Name') }}" />
                 <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <small class="text-gray-500 mb-1 block">*isi dengan nama perusahaan apabila ingin menjual raw material</small>
             </div>
 
             <div class="mt-4">
@@ -20,13 +21,13 @@
             </div>
 
             <div class="mt-4">
-                <x-label for="phone" value="{{ __('phone') }}" />
+                <x-label for="phone" value="{{ __('Phone') }}" />
                 <x-input id="phone" class="block mt-1 w-full" type="number" name="phone" :value="old('phone')" required autocomplete="username" />
             </div>
 
             <div class="mt-4">
-                <x-label for="address" value="{{ __('address') }}" />
-                <x-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required autocomplete="username" />
+                <x-label for="address" value="{{ __('Address') }}" />
+                <x-input id="address" class="block mt-1 w-full" type="text" name="Address" :value="old('address')" required autocomplete="username" />
             </div>
 
             <div class="mt-4">
