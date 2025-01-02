@@ -30,9 +30,7 @@ class PaymentHistory extends Model
         'amount' => 'decimal:2'
     ];
 
-    /**
-     * Status pembayaran yang tersedia
-     */
+    //Status pembayaran yang tersedia
     const PAYMENT_STATUS = [
         'PENDING' => 'pending',
         'PAID' => 'paid',
@@ -40,9 +38,7 @@ class PaymentHistory extends Model
         'REFUNDED' => 'refunded'
     ];
 
-    /**
-     * Metode pembayaran yang tersedia
-     */
+    //Metode pembayaran yang tersedia
     const PAYMENT_METHODS = [
         'CREDIT_CARD' => 'credit_card',
         'BANK_TRANSFER' => 'bank_transfer',
@@ -50,33 +46,25 @@ class PaymentHistory extends Model
         'OTHER' => 'other'
     ];
 
-    /**
-     * Relasi ke model Factory
-     */
+    //Relasi ke model Factory
     public function factory(): BelongsTo
     {
         return $this->belongsTo(Factory::class);
     }
 
-    /**
-     * Scope untuk filter berdasarkan status pembayaran
-     */
+    //Scope untuk filter berdasarkan status pembayaran
     public function scopeByStatus($query, $status)
     {
         return $query->where('payment_status', $status);
     }
 
-    /**
-     * Scope untuk filter berdasarkan metode pembayaran
-     */
+    //Scope untuk filter berdasarkan metode pembayaran
     public function scopeByPaymentMethod($query, $method)
     {
         return $query->where('payment_method', $method);
     }
 
-    /**
-     * Scope untuk filter pembayaran yang jatuh tempo
-     */
+    //Scope untuk filter pembayaran yang jatuh tempo
     public function scopeOverdue($query)
     {
         return $query->where('due_date', '<', now())
