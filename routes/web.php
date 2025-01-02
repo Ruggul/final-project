@@ -44,6 +44,7 @@ Route::get('/register', function () {
 //dhafin
 use App\Http\Controllers\userCartManagement\CartController;
 
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
 Route::prefix('keranjang')->group(function () {
     Route::get('/{id_pengguna}', [CartController::class, 'show']); // Menampilkan isi keranjang
     Route::post('/tambah', [CartController::class, 'addToCart']); // Menambahkan produk ke keranjang

@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\userCartManagement;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserCartManagement\Cart;
-use App\Models\UserCartManagement\Product;
-use App\Models\UserCartManagement\CartItem;
+use App\Models\userCartManagement\Cart;
+use App\Models\userCartManagement\Product;
+use App\Models\userCartManagement\CartItem;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    public function showCart()
+    {
+        $products = Product::all(); // Ambil data produk dari database
+        return view('userCartManagement.cart', compact('products'));
+    }
+
     // Menampilkan isi keranjang
     public function show($id_pengguna)
     {
