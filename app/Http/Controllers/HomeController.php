@@ -17,7 +17,7 @@ class HomeController extends Controller
         }elseif($usertype=='2'){
             return view('factory.home');
         }else{
-            return view('dashboard');
+            return view('user.home');
         }
     }
 }
