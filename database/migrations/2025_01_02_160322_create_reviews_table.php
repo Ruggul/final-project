@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('rating')->comment('1-5 stars');
             $table->text('review_text');
             $table->json('review_images')->nullable();
-            $table->boolean('is_published')->default(true); 
             $table->timestamp('purchase_date');
             $table->timestamps();
 
