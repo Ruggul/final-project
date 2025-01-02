@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::create('user', function (Blueprint $table) {
+        Schema::create('users_account', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->nullable();
             $table->string('username', 50)->unique();
@@ -18,8 +21,11 @@ return new class extends Migration
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::dropIfExists('user');
+        Schema::dropIfExists('users_account');
     }
 };

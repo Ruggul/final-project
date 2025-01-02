@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <h2 class="text-gray-600">Total Users</h2>
-                                    <p class="text-2xl font-semibold">1,250</p>
+                                    <p class="text-2xl font-semibold" id="totalUsers">Loading...</p>
                                 </div>
                             </div>
                         </div>
@@ -149,21 +149,11 @@
                                         <th class="px-6 py-3 text-left">ID</th>
                                         <th class="px-6 py-3 text-left">Nama</th>
                                         <th class="px-6 py-3 text-left">Email</th>
-                                        <th class="px-6 py-3 text-left">Status</th>
-                                        <th class="px-6 py-3 text-left">Aksi</th>
+                                        <th class="px-6 py-3 text-center">Role</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="border-b">
-                                        <td class="px-6 py-4">#001</td>
-                                        <td class="px-6 py-4">John Doe</td>
-                                        <td class="px-6 py-4">john@example.com</td>
-                                        <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full">Aktif</span></td>
-                                        <td class="px-6 py-4">
-                                            <button class="text-blue-500 hover:text-blue-700 mr-2">Edit</button>
-                                            <button class="text-red-500 hover:text-red-700">Hapus</button>
-                                        </td>
-                                    </tr>
+                                <tbody id="usersTableBody">
+                                    <!-- Data akan diisi melalui JavaScript -->
                                 </tbody>
                             </table>
                         </div>
@@ -252,7 +242,64 @@
 
         // Show selected content
         document.getElementById(contentId + '-content').classList.remove('hidden');
+
+        // Jika memilih menu users, load data users
+        if(contentId === 'users') {
+            loadUsers();
+        }
+
+        if(contentId === 'overview') {
+            loadTotalUsers();
+        }
     }
+
+    function loadUsers() {
+        fetch('/admin/users')
+            .then(response => response.json())
+            .then(users => {
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+                
+                users.forEach(user => {
+                    let roleSpan = '';
+                    switch(user.usertype) {
+                        case '0':
+                            roleSpan = '<span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full">User</span>';
+                            break;
+                        case '1':
+                            roleSpan = '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full">Admin</span>';
+                            break;
+                        case '2':
+                            roleSpan = '<span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full">Factory</span>';
+                            break;
+                    }
+
+                    tbody.innerHTML += `
+                        <tr class="border-b">
+                            <td class="px-6 py-4">#${user.id}</td>
+                            <td class="px-6 py-4">${user.name}</td>
+                            <td class="px-6 py-4">${user.email}</td>
+                            <td class="px-6 py-4 text-center">${roleSpan}</td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function loadTotalUsers() {
+        fetch('/admin/total-users')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalUsers').textContent = data.total;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Load total users saat halaman pertama kali dibuka
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTotalUsers();
+    });
     </script>
 </body>
 </html>
