@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
             
             // Memastikan nomor akun unik untuk setiap user
-            $table->unique(['user_id', 'account_number']);
+            $table->unique(['account_number']);
         });
     }
     public function down(): void
