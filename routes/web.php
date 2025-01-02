@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// rayhan
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingPage');
 });
 
 Route::middleware([
@@ -27,6 +30,18 @@ Route::middleware([
     })->name('dashboard');
 });
 
+// rayhan
+Route::get('/redirect',[HomeController::class,'redirect']);
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+
+//dhafin
 use App\Http\Controllers\userCartManagement\CartController;
 
 Route::prefix('keranjang')->group(function () {
