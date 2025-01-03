@@ -16,6 +16,14 @@
 
         <!-- Styles -->
         @livewireStyles
+
+        <!-- Button to Cart Management -->
+        <div class="mt-4">
+            <a href="{{ route('cart') }}"
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                Go to Cart Management
+            </a>
+        </div>
     </head>
     <body class="font-sans antialiased">
         <x-banner />
