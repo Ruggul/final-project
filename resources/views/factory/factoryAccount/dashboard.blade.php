@@ -63,6 +63,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->is('payment-history*') ? 'active' : '' }}" href="{{ route('payment-history.index') }}">
+                            <i class="fas fa-money-bill me-2"></i> Factory User 
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->is('documents*') ? 'active' : '' }}" href="{{ route('documents.index') }}">
                             <i class="fas fa-file me-2"></i> Documents
                         </a>
