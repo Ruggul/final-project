@@ -13,7 +13,6 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        // Cek apakah admin sudah ada
         if(!DB::table('users')->where('email', 'admin@admin.com')->exists()) {
             // Buat 1 akun admin
             DB::table('users')->insert([
@@ -28,7 +27,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // Buat 69 akun user biasa
         for($i = 1; $i <= 69; $i++){
             $email = $faker->unique()->safeEmail();
             
@@ -47,6 +45,21 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        }
+
+        for($i = 1; $i <= 3; $i++) {
+            if(!DB::table('users')->where('email', "factory{$i}@gmail.com")->exists()) {
+                DB::table('users')->insert([
+                    'name' => "Factory {$i}",
+                    'email' => "factory{$i}@gmail.com",
+                    'usertype' => '2',
+                    'phone' => $faker->phoneNumber(),
+                    'address' => $faker->address(),
+                    'password' => Hash::make('password123'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }
