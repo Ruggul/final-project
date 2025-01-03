@@ -8,8 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('payment_histories', function (Blueprint $table) {
+        Schema::create('payment_history', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('factory_id')->constrained('factory')->onDelete('cascade');
             $table->string('invoice_number')->unique();
             $table->decimal('amount', 12, 2);
             $table->enum('payment_status', ['pending', 'paid', 'failed', 'refunded']);
@@ -23,6 +24,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('payment_histories');
+        Schema::dropIfExists('payment_history');
     }
 };
