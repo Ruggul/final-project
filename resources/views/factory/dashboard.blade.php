@@ -111,4 +111,27 @@
         </div>
     </div>
 </div>
+
+<script>
+// Contoh pemanggilan API
+fetch('/dashboard/top-items')
+    .then(response => response.json())
+    .then(data => {
+        // Update UI dengan data yang diterima
+        updateTopItemsChart(data);
+    });
+
+// Contoh filter periode
+document.getElementById('filter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('/dashboard/filter?' + new URLSearchParams(formData))
+        .then(response => response.json())
+        .then(data => {
+            // Update UI dengan data yang difilter
+            updateDashboardData(data);
+        });
+});
+</script>
 @endsection
