@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\StockMovement;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -23,12 +22,10 @@ class InventoryController extends Controller
             'stok' => 'required|numeric',
             'satuan' => 'required',
             'harga_satuan' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id'
         ]);
 
         Item::create($validated);
-        return redirect()->route('inventory.index')
-            ->with('sukses', 'Barang berhasil ditambahkan');
+        return redirect()->route('inventory.index')->with('success', 'Barang berhasil ditambahkan');
     }
 
     public function barangMasuk(Request $request, Item $item)
@@ -41,15 +38,7 @@ class InventoryController extends Controller
         $item->stok += $validated['jumlah'];
         $item->save();
 
-        StockMovement::create([
-            'item_id' => $item->id,
-            'tipe' => 'masuk',
-            'jumlah' => $validated['jumlah'],
-            'keterangan' => $validated['keterangan'],
-            'user_id' => auth()->id()
-        ]);
-
-        return back()->with('sukses', 'Stok berhasil ditambahkan');
+        return back()->with('success', 'Stok berhasil ditambahkan');
     }
 
     public function barangKeluar(Request $request, Item $item)
@@ -62,14 +51,6 @@ class InventoryController extends Controller
         $item->stok -= $validated['jumlah'];
         $item->save();
 
-        StockMovement::create([
-            'item_id' => $item->id,
-            'tipe' => 'keluar',
-            'jumlah' => $validated['jumlah'],
-            'keterangan' => $validated['keterangan'],
-            'user_id' => auth()->id()
-        ]);
-
-        return back()->with('sukses', 'Stok berhasil dikurangi');
+        return back()->with('success', 'Stok berhasil dikurangi');
     }
 }
