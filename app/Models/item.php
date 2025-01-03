@@ -9,14 +9,10 @@ class Item extends Model
     protected $fillable = [
         'kode_barang',
         'nama_barang',
+        'deskripsi',
         'stok',
         'satuan',
         'harga_satuan',
-        'category_id'
+        'lokasi_penyimpanan'
     ];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
 }
