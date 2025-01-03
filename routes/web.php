@@ -33,7 +33,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
-
 Route::get('/redirect', [HomeController::class, 'redirect'])->name('redirect');
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
@@ -77,9 +76,3 @@ Route::prefix('inventory')->group(function () {
     Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
-
-// kevin
-// use App\Http\Controllers\PaymentHistoryController;
-
-// Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
-// Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
