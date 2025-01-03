@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    <!-- Card 1 -->
+    <!-- Total Users Card -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-500 bg-opacity-75">
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <!-- Card 2 -->
+    <!-- Total Products Card -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-green-500 bg-opacity-75">
@@ -20,33 +20,33 @@
             </div>
             <div class="ml-4">
                 <h2 class="text-gray-600">Total Produk</h2>
-                <p class="text-2xl font-semibold">150</p>
+                <p class="text-2xl font-semibold" id="totalProducts">Loading...</p>
             </div>
         </div>
     </div>
 
-    <!-- Card 3 -->
+    <!-- Total Stock Card -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
             <div class="p-3 rounded-full bg-yellow-500 bg-opacity-75">
-                <i class="fas fa-shopping-cart text-white text-2xl"></i>
+                <i class="fas fa-warehouse text-white text-2xl"></i>
             </div>
             <div class="ml-4">
-                <h2 class="text-gray-600">Total Orders</h2>
-                <p class="text-2xl font-semibold">450</p>
+                <h2 class="text-gray-600">Total Stok</h2>
+                <p class="text-2xl font-semibold" id="totalStock">Loading...</p>
             </div>
         </div>
     </div>
 
-    <!-- Card 4 -->
+    <!-- Low Stock Alert Card -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-purple-500 bg-opacity-75">
-                <i class="fas fa-dollar-sign text-white text-2xl"></i>
+            <div class="p-3 rounded-full bg-red-500 bg-opacity-75">
+                <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
             </div>
             <div class="ml-4">
-                <h2 class="text-gray-600">Revenue</h2>
-                <p class="text-2xl font-semibold">$15,250</p>
+                <h2 class="text-gray-600">Stok Menipis</h2>
+                <p class="text-2xl font-semibold" id="lowStock">Loading...</p>
             </div>
         </div>
     </div>

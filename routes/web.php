@@ -28,30 +28,25 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/redirect', [HomeController::class, 'redirect']);
-    
-    // Routes untuk setiap tipe user
-    Route::get('/user/home', function () {
-        return view('user.home');
-    })->name('user.home');
-
-    Route::get('/admin/home', function () {
-        return view('admin.home');
-    })->name('admin.home');
-
-    Route::get('/factory/home', function () {
-        return view('factory.home');
-    })->name('factory.home');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
 
 
-Route::get('/redirect', [HomeController::class, 'redirect']);
+Route::get('/redirect', [HomeController::class, 'redirect'])->name('redirect');
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
 Route::get('/admin/users', [AdminController::class, 'getUsers'])->name('admin.users');
 
 Route::get('/admin/total-users', [AdminController::class, 'getTotalUsers'])->name('admin.total-users');
+
+Route::get('/admin/total-products', [AdminController::class, 'getTotalProducts'])->name('admin.total-products');
+
+Route::get('/admin/total-stock', [AdminController::class, 'getTotalStock'])->name('admin.total-stock');
+
+Route::get('/admin/low-stock', [AdminController::class, 'getLowStock'])->name('admin.low-stock');
 
 Route::get('/login', function () {
     return view('auth.login');

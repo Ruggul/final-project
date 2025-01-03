@@ -16,6 +16,7 @@
 
         if(contentId === 'overview') {
             loadTotalUsers();
+            loadTotalProducts();
         }
     }
 
@@ -53,17 +54,118 @@
             .catch(error => console.error('Error:', error));
     }
 
+    function formatNumber(number) {
+        return new Intl.NumberFormat('id-ID').format(number || 0);
+    }
 
     function loadTotalUsers() {
         fetch('/admin/total-users')
             .then(response => response.json())
             .then(data => {
-                document.getElementById('totalUsers').textContent = data.total;
+                const totalElement = document.getElementById('totalUsers');
+                if(totalElement) {
+                    totalElement.textContent = formatNumber(data.total);
+                }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                const totalElement = document.getElementById('totalUsers');
+                if(totalElement) {
+                    totalElement.textContent = 'Error';
+                }
+            });
+    }
+
+    function loadTotalProducts() {
+        fetch('/admin/total-products')
+            .then(response => response.json())
+            .then(data => {
+                const totalElement = document.getElementById('totalProducts');
+                if(totalElement) {
+                    totalElement.textContent = formatNumber(data.total);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const totalElement = document.getElementById('totalProducts');
+                if(totalElement) {
+                    totalElement.textContent = 'Error';
+                }
+            });
+    }
+
+    function loadTotalStock() {
+        console.log('Fetching total stock...');
+        fetch('/admin/total-stock')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                const totalElement = document.getElementById('totalStock');
+                if(totalElement) {
+                    totalElement.textContent = formatNumber(data.total);
+                }
+            })
+            .catch(error => {
+                console.error('Stock Error:', error);
+                const totalElement = document.getElementById('totalStock');
+                if(totalElement) {
+                    totalElement.textContent = 'Error';
+                }
+            });
+    }
+
+    function loadLowStock() {
+        console.log('Fetching low stock items...');
+        fetch('/admin/low-stock')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                const totalElement = document.getElementById('lowStock');
+                if(totalElement) {
+                    totalElement.textContent = formatNumber(data.total);
+                }
+            })
+            .catch(error => {
+                console.error('Low Stock Error:', error);
+                const totalElement = document.getElementById('lowStock');
+                if(totalElement) {
+                    totalElement.textContent = 'Error';
+                }
+            });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         loadTotalUsers();
+        loadTotalProducts();
+        loadTotalStock();
+        loadLowStock();
+        
+        // Refresh setiap 10 detik
+        setInterval(() => {
+            loadTotalUsers();
+            loadTotalProducts();
+            loadTotalStock();
+            loadLowStock();
+        }, 10000);
     });
+
+    function loadOverviewStats() {
+        loadTotalUsers();
+        loadTotalProducts();
+        // Tambahkan fungsi load statistik lainnya di sini
+    }
 </script> 
