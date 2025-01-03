@@ -29,13 +29,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/redirect',[HomeController::class,'redirect']);
 });
-
-// rayhan
-Route::get('/redirect',[HomeController::class,'redirect']);
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
