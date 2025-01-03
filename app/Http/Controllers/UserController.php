@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function home()
     {
-        // Mengambil produk untuk flash sale
+        Mengambil produk untuk flash sale
         $flashSaleProducts = Product::inRandomOrder()
             ->limit(6)
             ->get();
