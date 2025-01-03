@@ -63,21 +63,12 @@ Route::prefix('keranjang')->group(function () {
 
 // hasan
 Route::prefix('inventory')->group(function () {
-    // Tampilan utama inventory
     Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
-    
-    // Search route harus di atas route dengan parameter
     Route::get('/search', [InventoryController::class, 'search'])->name('inventory.search');
-    
-    // Route untuk tambah barang baru
     Route::post('/', [InventoryController::class, 'tambahBarang'])->name('inventory.store');
-    
-    // Route untuk edit, update, dan delete
     Route::get('/{item}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
     Route::put('/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-    
-    // Route untuk barang masuk dan keluar
     Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
