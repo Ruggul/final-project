@@ -29,30 +29,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(isset($barang) && count($barang) > 0)
-                        @foreach($barang as $item)
-                            <tr>
-                                <td>{{ $item->kode_barang }}</td>
-                                <td>{{ $item->nama_barang }}</td>
-                                <td>{{ $item->stok }}</td>
-                                <td>{{ $item->satuan }}</td>
-                                <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
-                                <td>{{ $item->lokasi_penyimpanan }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-success" onclick="barangMasuk({{ $item->id }})">
-                                        Masuk
-                                    </button>
-                                    <button class="btn btn-sm btn-warning" onclick="barangKeluar({{ $item->id }})">
-                                        Keluar
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
+                    @forelse($barang ?? collect() as $item)
+                        <tr>
+                            <td>{{ $item->kode_barang }}</td>
+                            <td>{{ $item->nama_barang }}</td>
+                            <td>{{ $item->stok }}</td>
+                            <td>{{ $item->satuan }}</td>
+                            <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
+                            <td>{{ $item->lokasi_penyimpanan }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success" onclick="barangMasuk({{ $item->id }})">
+                                    Masuk
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="barangKeluar({{ $item->id }})">
+                                    Keluar
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
                         <tr>
                             <td colspan="7" class="text-center">Tidak ada data barang</td>
                         </tr>
-                    @endif
+                    @endforelse
                 </tbody>
             </table>
         </div>
