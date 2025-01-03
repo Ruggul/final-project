@@ -50,7 +50,9 @@ Route::get('/admin/low-stock', [AdminController::class, 'getLowStock'])->name('a
 Route::get('/admin/products', [AdminController::class, 'getProducts'])->name('admin.products');
 
 Route::get('/admin/products/{id}', [AdminController::class, 'getProduct'])->name('admin.products.get');
-Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
+Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct'])
+    ->name('admin.products.update')
+    ->middleware(['auth']);
 Route::delete('/admin/products/{id}', [AdminController::class, 'deleteProduct'])->name('admin.products.delete');
 
 Route::get('/login', function () {
