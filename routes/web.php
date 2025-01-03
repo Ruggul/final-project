@@ -71,6 +71,13 @@ Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('i
 Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
 Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
 
+// kevin
+use App\Http\Controllers\PaymentHistoryController;
 
-
-
+Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
+Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
+Route::post('/factory', [FactoryUserController::class, 'store'])->name('factory.store');
+Route::get('/factory/{factory}', [FactoryUserController::class, 'show'])->name('factory.show');
+Route::get('/factory/{factory}/edit', [FactoryUserController::class, 'edit'])->name('factory.edit');
+Route::put('/factory/{factory}', [FactoryUserController::class, 'update'])->name('factory.update');
+Route::delete('/factory/factoryUser/{factory}', [FactoryUserController::class, 'destroy'])->name('factory.destroy');
