@@ -91,28 +91,22 @@ Route::middleware(['auth'])->group(function () {
     // TopUp Routes
     Route::prefix('topups')->group(function () {
         // Show topup history
-        Route::get('/', [TopUpController::class, 'index'])
-            ->name('topups.index');
+        Route::get('/', [TopUpController::class, 'index'])->name('topups.index');
 
         // Show topup form
-        Route::get('/create', [TopUpController::class, 'create'])
-            ->name('topups.create');
+        Route::get('/create', [TopUpController::class, 'create'])->name('topups.create');
 
         // Process topup
-        Route::post('/', [TopUpController::class, 'store'])
-            ->name('topups.store');
+        Route::post('/', [TopUpController::class, 'store'])->name('topups.store');
 
         // Show topup detail
-        Route::get('/{topup}', [TopUpController::class, 'show'])
-            ->name('topups.show');
+        Route::get('/{topup}', [TopUpController::class, 'show'])->name('topups.show');
 
         // Cancel topup (if pending)
-        Route::delete('/{topup}', [TopUpController::class, 'cancel'])
-            ->name('topups.cancel');
+        Route::delete('/{topup}', [TopUpController::class, 'cancel'])->name('topups.cancel');
 
         // Verify payment
-        Route::post('/{topup}/verify', [TopUpController::class, 'verify'])
-            ->name('topups.verify');
+        Route::post('/{topup}/verify', [TopUpController::class, 'verify'])->name('topups.verify');
     });
 });
 
