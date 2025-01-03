@@ -10,13 +10,17 @@ class InventoryController extends Controller
 {
     public function index()
     {
-        // Mengambil data atau memberikan collection kosong jika gagal
-        $barang = DB::table('items')->get() ?? collect();
+        // Debug untuk melihat apakah data ada
+        dd(Item::all());
         
-        // Kirim data ke view dengan array asosiatif
-        return view('factory.home', [
-            'barang' => $barang
-        ]);
+        // Mengambil semua data dari tabel items
+        $barang = DB::table('items')->get();
+        
+        // Debug untuk melihat data yang dikirim ke view
+        dd($barang);
+        
+        // Kirim data ke view
+        return view('factory.home', ['barang' => $barang]);
     }
 
     public function tambahBarang(Request $request)
