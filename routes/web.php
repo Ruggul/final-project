@@ -51,10 +51,9 @@ Route::get('/register', function () {
 
 //dhafin
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\UserController;
 
 // Route untuk homepage
-Route::get('/', [UserController::class, 'home'])->name('user.home');
+// Route::get('/', [UserController::class, 'home'])->name('user.home');
 // Cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
