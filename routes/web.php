@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,17 +49,17 @@ Route::get('/register', function () {
 })->name('register');
 
 //dhafin
-use App\Http\Controllers\userCartManagement\CartController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\UserController;
 
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart');
-Route::prefix('keranjang')->group(function () {
-    Route::get('/{id_pengguna}', [CartController::class, 'show']); // Menampilkan isi keranjang
-    Route::post('/tambah', [CartController::class, 'addToCart']); // Menambahkan produk ke keranjang
-    Route::delete('/hapus', [CartController::class, 'removeFromCart']); // Menghapus produk dari keranjang
-    Route::delete('/kosongkan/{id_pengguna}', [CartController::class, 'clearCart']); // Mengosongkan keranjang
-    Route::get('/total/{id_pengguna}', [CartController::class, 'calculateTotal']); // Menghitung total harga
-    Route::put('/keranjang/perbarui', [CartController::class, 'updateQuantity']); // Memperbarui kuantitas produk
-});
+// Route untuk homepage
+Route::get('/', [UserController::class, 'home'])->name('user.home');
+// Cart routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 
 
