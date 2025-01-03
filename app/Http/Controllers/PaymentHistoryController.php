@@ -2,60 +2,82 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Factory;
+use App\Models\PaymentHistory;
 use Illuminate\Http\Request;
 
-class FactoryController extends Controller
+class PaymentHistoryController extends Controller
 {
-    //Display a listing of the resource.
+    //Menampilkan daftar riwayat pembayaran
     public function index()
     {
-        $factories = Factory::paginate(10);
-        return view('factories.index', compact('factories'));
+        $payments = PaymentHistory::latest()->paginate(10);
+
+        return view('payment-history.index', compact('payments'));
     }
 
-    //Show the form for creating a new resource.
+    //Menampilkan form tambah pembayaran
     public function create()
     {
-        return view('factories.create');
+        return view('payment-history.create');
     }
 
-    //Store a newly created resource in storage.
+    //Menyimpan data pembayaran baru
     public function store(Request $request)
     {
-        $request->validate(Factory::$rules);
-        Factory::create($request->all());
-        return redirect()->route('factories.index')->with('success', 'Factory created successfully');
+        $validated = $request->validate([
+            'invoice_number' => 'required|unique:payment_history',
+            'payment_status' => 'required|in:pending,paid,failed,refunded',
+            'payment_method' => 'required|in:credit_card,bank_transfer,e-wallet,other',
+            'payment_date' => 'required|date',
+            'due_date' => 'required|date',
+            'description' => 'nullable'
+        ]);
+
+        PaymentHistory::create($validated);
+
+        return redirect()
+            ->route('payment-history.index')
+            ->with('success', 'Payment added successfully');
     }
 
-    //Display the specified resource.
-    public function show(string $id)
+    //Menampilkan detail pembayaran
+    public function show(PaymentHistory $paymentHistory)
     {
-        $factory = Factory::findOrFail($id);
-        return view('factories.show', compact('factory'));
+        return view('payment-history.show', compact('paymentHistory'));
     }
 
-    //Show the form for editing the specified resource.
-    public function edit(string $id)
+    //Menampilkan form edit pembayaran
+    public function edit(PaymentHistory $paymentHistory)
     {
-        $factory = Factory::findOrFail($id);
-        return view('factories.edit', compact('factory'));
+        return view('payment-history.edit', compact('paymentHistory'));
     }
 
-    //Update the specified resource in storage.
-    public function update(Request $request, string $id)
+    //Mengupdate data pembayaran
+    public function update(Request $request, PaymentHistory $paymentHistory)
     {
-        $factory = Factory::findOrFail($id);
-        $request->validate(Factory::$rules);
-        $factory->update($request->all());
-        return redirect()->route('factories.index')->with('success', 'Factory updated successfully');
+        $validated = $request->validate([
+            'invoice_number' => 'required|unique:payment_history,invoice_number,' . $paymentHistory->id,
+            'payment_status' => 'required|in:pending,paid,failed,refunded',
+            'payment_method' => 'required|in:credit_card,bank_transfer,e-wallet,other',
+            'payment_date' => 'required|date',
+            'due_date' => 'required|date',
+            'description' => 'nullable'
+        ]);
+
+        $paymentHistory->update($validated);
+
+        return redirect()
+            ->route('payment-history.index')
+            ->with('success', 'Payment updated successfully');
     }
 
-    //Remove the specified resource from storage.
-    public function destroy(string $id)
+    //Menghapus data pembayaran
+    public function destroy(PaymentHistory $paymentHistory)
     {
-        $factory = Factory::findOrFail($id);
-        $factory->delete();
-        return redirect()->route('factories.index')->with('success', 'Factory deleted successfully');
+        $paymentHistory->delete();
+
+        return redirect()
+            ->route('payment-history.index')
+            ->with('success', 'Payment deleted successfully');
     }
 }
