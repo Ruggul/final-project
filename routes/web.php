@@ -28,7 +28,20 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/redirect',[HomeController::class,'redirect']);
+    Route::get('/redirect', [HomeController::class, 'redirect']);
+    
+    // Routes untuk setiap tipe user
+    Route::get('/user/home', function () {
+        return view('user.home');
+    })->name('user.home');
+
+    Route::get('/admin/home', function () {
+        return view('admin.home');
+    })->name('admin.home');
+
+    Route::get('/factory/home', function () {
+        return view('factory.home');
+    })->name('factory.home');
 });
 
 
@@ -71,16 +84,12 @@ Route::prefix('inventory')->group(function () {
 });
 
 // kevin
-use App\Http\Controllers\PaymentHistoryController;
+// use App\Http\Controllers\PaymentHistoryController;
 
-Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
-Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
-Route::post('/factory', [FactoryUserController::class, 'store'])->name('factory.store');
-Route::get('/factory/{factory}', [FactoryUserController::class, 'show'])->name('factory.show');
-Route::get('/factory/{factory}/edit', [FactoryUserController::class, 'edit'])->name('factory.edit');
-Route::put('/factory/{factory}', [FactoryUserController::class, 'update'])->name('factory.update');
-Route::delete('/factory/factoryUser/{factory}', [FactoryUserController::class, 'destroy'])->name('factory.destroy');
-
-
-
-
+// Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
+// Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
+// Route::post('/factory', [FactoryUserController::class, 'store'])->name('factory.store');
+// Route::get('/factory/{factory}', [FactoryUserController::class, 'show'])->name('factory.show');
+// Route::get('/factory/{factory}/edit', [FactoryUserController::class, 'edit'])->name('factory.edit');
+// Route::put('/factory/{factory}', [FactoryUserController::class, 'update'])->name('factory.update');
+// Route::delete('/factory/factoryUser/{factory}', [FactoryUserController::class, 'destroy'])->name('factory.destroy');
