@@ -25,10 +25,10 @@
                             <th>Invoice Number</th>
                             <th>Company Name</th>
                             <th>Payment Date</th>
-                            <th>Amount</th>
                             <th>Payment Method</th>
+                            <th>Due Date</th>
+                            <th>Amount</th>
                             <th>Status</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
