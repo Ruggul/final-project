@@ -9,7 +9,7 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
-        @include('layouts.sidebar')
+        @include('factory.sidebar')
         
         <!-- Content -->
         <div class="main-content">
