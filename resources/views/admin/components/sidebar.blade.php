@@ -1,6 +1,6 @@
 <div class="w-64 h-screen bg-gray-800 fixed">
     <div class="flex items-center justify-center h-20 shadow-md">
-        <h1 class="text-white text-2xl font-bold">Admin Panel</h1>
+        <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Tradegate Logo" class="h-12">
     </div>
     <nav class="mt-5">
         <a href="#" onclick="showContent('overview')" class="flex items-center py-3 px-6 text-white hover:bg-gray-700 transition">
