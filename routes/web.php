@@ -82,6 +82,13 @@ Route::prefix('inventory')->group(function () {
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
 
+// kevin
+use App\Http\Controllers\PaymentHistoryController;
 
-
-
+Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
+Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
+Route::post('/factory', [FactoryUserController::class, 'store'])->name('factory.store');
+Route::get('/factory/{factory}', [FactoryUserController::class, 'show'])->name('factory.show');
+Route::get('/factory/{factory}/edit', [FactoryUserController::class, 'edit'])->name('factory.edit');
+Route::put('/factory/{factory}', [FactoryUserController::class, 'update'])->name('factory.update');
+Route::delete('/factory/factoryUser/{factory}', [FactoryUserController::class, 'destroy'])->name('factory.destroy');
