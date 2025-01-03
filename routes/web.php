@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InventoryController;
 
 
 /*
@@ -61,6 +62,25 @@ Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.upda
 Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
+// hasan
+Route::prefix('inventory')->group(function () {
+    Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/search', [InventoryController::class, 'search'])->name('inventory.search');
+    Route::post('/', [InventoryController::class, 'tambahBarang'])->name('inventory.store');
+    Route::get('/{item}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/{item}', [InventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
+    Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
+});
 
+// kevin
+use App\Http\Controllers\PaymentHistoryController;
 
-
+Route::get('/factory', [FactoryUserController::class, 'index'])->name('factory.index');
+Route::get('/factory/create', [FactoryUserController::class, 'create'])->name('factory.create');
+Route::post('/factory', [FactoryUserController::class, 'store'])->name('factory.store');
+Route::get('/factory/{factory}', [FactoryUserController::class, 'show'])->name('factory.show');
+Route::get('/factory/{factory}/edit', [FactoryUserController::class, 'edit'])->name('factory.edit');
+Route::put('/factory/{factory}', [FactoryUserController::class, 'update'])->name('factory.update');
+Route::delete('/factory/factoryUser/{factory}', [FactoryUserController::class, 'destroy'])->name('factory.destroy');
