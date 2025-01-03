@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\BackController;
+use App\Http\Controllers\CartController;
 
 
 /*
@@ -50,11 +52,9 @@ Route::get('/register', function () {
 })->name('register');
 
 //dhafin
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\UserController;
 
 // Route untuk homepage
-Route::get('/', [UserController::class, 'home'])->name('user.home');
+Route::get('/', [BackController::class, 'home'])->name('user.home');
 // Cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
