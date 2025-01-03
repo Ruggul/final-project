@@ -32,7 +32,7 @@ Route::middleware([
 });
 
 // rayhan
-
+Route::get('/redirect',[HomeController::class,'redirect']);
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 
