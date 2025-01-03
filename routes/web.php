@@ -5,7 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
-
+use App\Http\Controllers\TopUpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +84,35 @@ Route::prefix('inventory')->group(function () {
     Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
+
+//iky
+
+Route::middleware(['auth'])->group(function () {
+    // TopUp Routes
+    Route::prefix('topups')->group(function () {
+        // Show topup history
+        Route::get('/', [TopUpController::class, 'index'])
+            ->name('topups.index');
+
+        // Show topup form
+        Route::get('/create', [TopUpController::class, 'create'])
+            ->name('topups.create');
+
+        // Process topup
+        Route::post('/', [TopUpController::class, 'store'])
+            ->name('topups.store');
+
+        // Show topup detail
+        Route::get('/{topup}', [TopUpController::class, 'show'])
+            ->name('topups.show');
+
+        // Cancel topup (if pending)
+        Route::delete('/{topup}', [TopUpController::class, 'cancel'])
+            ->name('topups.cancel');
+
+        // Verify payment
+        Route::post('/{topup}/verify', [TopUpController::class, 'verify'])
+            ->name('topups.verify');
+    });
+});
+
