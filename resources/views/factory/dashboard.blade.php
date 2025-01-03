@@ -75,7 +75,14 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info text-white mb-4">
+                <div class="card-body">
+                    <h5>Document</Doc></h5>
+                    <h3>{{ $document }}</h3>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-header">
@@ -89,6 +96,7 @@
                                 <th>Invoice</th>
                                 <th>Jumlah</th>
                                 <th>Status</th>
+                                <th>Payment Method</th>
                             </tr>
                         </thead>
                         <tbody>
