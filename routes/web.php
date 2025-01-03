@@ -47,6 +47,12 @@ Route::get('/admin/total-stock', [AdminController::class, 'getTotalStock'])->nam
 
 Route::get('/admin/low-stock', [AdminController::class, 'getLowStock'])->name('admin.low-stock');
 
+Route::get('/admin/products', [AdminController::class, 'getProducts'])->name('admin.products');
+
+Route::get('/admin/products/{id}', [AdminController::class, 'getProduct'])->name('admin.products.get');
+Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct'])->name('admin.products.update');
+Route::delete('/admin/products/{id}', [AdminController::class, 'deleteProduct'])->name('admin.products.delete');
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
