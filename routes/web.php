@@ -25,9 +25,14 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->Route::get('/redirect',[HomeController::class,'redirect']);
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 // rayhan
+
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.home');
 

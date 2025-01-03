@@ -18,6 +18,8 @@ class HomeController extends Controller
             return view('admin.home');
         }elseif($usertype=='2'){
             return view('factory.home');
+        }else{
+            return view('landingPage');
         }
     }
 }
