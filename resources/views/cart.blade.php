@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <nav class="bg-green-600 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="flex items-center">
+            <a href="{{ url('/redirect') }}" class="flex items-center">
                 <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" 
                      class="h-8 filter brightness-0 invert">
             </a>
@@ -33,25 +33,29 @@
                 <table class="w-full">
                     <thead>
                         <tr class="border-b">
+                            <th class="text-left py-4">Kode</th>
                             <th class="text-left py-4">Produk</th>
                             <th class="text-center py-4">Harga</th>
                             <th class="text-center py-4">Jumlah</th>
                             <th class="text-center py-4">Total</th>
-                            <th class="text-center py-4">Aksi</th>
+                            <th class="text-center py-4">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($cartItems as $id => $details)
                             <tr class="border-b">
                                 <td class="py-4">
-                                    <div class="flex items-center">
-                                        <img class="h-16 w-16 object-cover rounded" 
-                                             src="{{ Storage::url($details['image']) }}" 
-                                             alt="{{ $details['name'] }}">
-                                        <span class="ml-4">{{ $details['name'] }}</span>
+                                    {{ $details['kode_barang'] }}
+                                </td>
+                                <td class="py-4">
+                                    <div class="flex flex-col">
+                                        <span class="font-medium">{{ $details['name'] }}</span>
+                                        <span class="text-sm text-gray-500">{{ $details['lokasi'] }}</span>
                                     </div>
                                 </td>
-                                <td class="text-center py-4">Rp {{ number_format($details['price']) }}</td>
+                                <td class="text-center py-4">
+                                    Rp {{ number_format($details['price']) }}
+                                </td>
                                 <td class="text-center py-4">
                                     <div class="flex items-center justify-center">
                                         <form action="{{ route('cart.update') }}" method="POST" class="flex items-center">
@@ -61,6 +65,7 @@
                                             <input type="number" name="quantity" value="{{ $details['quantity'] }}" 
                                                    class="w-20 text-center border rounded px-2 py-1"
                                                    min="1">
+                                            <span class="ml-2">{{ $details['satuan'] }}</span>
                                             <button type="submit" class="ml-2 text-blue-600">
                                                 <i class="fas fa-sync-alt"></i>
                                             </button>
@@ -95,16 +100,19 @@
 
                     <div class="text-right">
                         <p class="text-lg font-bold">Total: Rp {{ number_format($total) }}</p>
-                        <button class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-                            Checkout
-                        </button>
+                        <form action="{{ route('checkout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                                Checkout
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         @else
             <div class="bg-white rounded-lg shadow-md p-6 text-center">
                 <p class="text-gray-500 mb-4">Keranjang belanja Anda kosong</p>
-                <a href="#" class="text-green-600 hover:text-green-700">
+                <a href="{{ url('/redirect') }}" class="text-green-600 hover:text-green-700">
                     Lanjutkan Belanja
                 </a>
             </div>

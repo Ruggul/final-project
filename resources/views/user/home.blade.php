@@ -65,19 +65,31 @@
                 <a href="#" class="text-green-600 hover:text-green-700">Lihat Semua</a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- Product Card -->
+                @if(isset($flashSaleProducts))
+                    <!-- {{ $flashSaleProducts->count() }} items found -->
+                @else
+                    <!-- Variable $flashSaleProducts not found -->
+                @endif
+                @foreach($flashSaleProducts as $product)
                 <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                    <img src="https://via.placeholder.com/200" alt="Product" class="w-full h-48 object-cover">
                     <div class="p-4">
-                        <h3 class="text-sm font-medium text-gray-900 mb-2">Nama Produk</h3>
-                        <p class="text-lg font-bold text-green-600">Rp 99.000</p>
-                        <p class="text-sm text-gray-500 line-through">Rp 150.000</p>
-                        <div class="mt-2 flex items-center">
-                            <div class="bg-red-100 text-red-600 text-xs px-2 py-1 rounded">50% OFF</div>
-                        </div>
+                        <h3 class="text-sm font-medium text-gray-900 mb-2">{{ $product->nama_barang }}</h3>
+                        <p class="text-xs text-gray-500 mb-2">{{ $product->deskripsi }}</p>
+                        <p class="text-lg font-bold text-green-600">Rp {{ number_format($product->harga_satuan) }}</p>
+                        <p class="text-sm text-gray-500">Stok: {{ $product->stok }} {{ $product->satuan }}</p>
+                        <p class="text-xs text-gray-400">{{ $product->lokasi_penyimpanan }}</p>
+                        
+                        <form action="{{ route('cart.add') }}" method="POST" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                                Tambah ke Keranjang
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <!-- Repeat product cards -->
+                @endforeach
             </div>
         </div>
 
@@ -85,19 +97,26 @@
         <div class="bg-white rounded-lg shadow p-6 mb-6">
             <h2 class="text-lg font-semibold mb-4">Rekomendasi Untukmu</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- Product Card -->
+                @foreach($recommendedProducts as $product)
                 <div class="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                    <img src="https://via.placeholder.com/200" alt="Product" class="w-full h-48 object-cover">
                     <div class="p-4">
-                        <h3 class="text-sm font-medium text-gray-900 mb-2">Nama Produk</h3>
-                        <p class="text-lg font-bold text-green-600">Rp 199.000</p>
-                        <div class="mt-2 flex items-center text-sm text-gray-500">
-                            <i class="fas fa-star text-yellow-400 mr-1"></i>
-                            <span>4.5 | Terjual 1rb+</span>
-                        </div>
+                        <h3 class="text-sm font-medium text-gray-900 mb-2">{{ $product->nama_barang }}</h3>
+                        <p class="text-xs text-gray-500 mb-2">{{ $product->deskripsi }}</p>
+                        <p class="text-lg font-bold text-green-600">Rp {{ number_format($product->harga_satuan) }}</p>
+                        <p class="text-sm text-gray-500">Stok: {{ $product->stok }} {{ $product->satuan }}</p>
+                        <p class="text-xs text-gray-400">{{ $product->lokasi_penyimpanan }}</p>
+                        
+                        <form action="{{ route('cart.add') }}" method="POST" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                                Tambah ke Keranjang
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <!-- Repeat product cards -->
+                @endforeach
             </div>
         </div>
     </main>
