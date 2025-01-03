@@ -66,11 +66,10 @@ Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory
 Route::post('/inventory', [InventoryController::class, 'tambahBarang'])->name('inventory.store');
 Route::post('/inventory/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
 Route::post('/inventory/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
-
-// Tambahan route untuk edit dan delete jika diperlukan
 Route::get('/inventory/{item}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
 Route::put('/inventory/{item}', [InventoryController::class, 'update'])->name('inventory.update');
 Route::delete('/inventory/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+Route::get('/inventory/search', [InventoryController::class, 'search'])->name('inventory.search');
 
 
 
