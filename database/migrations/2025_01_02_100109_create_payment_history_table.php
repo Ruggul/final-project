@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('payment_history', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->unique();
-            $table->decimal('amount', 12, 2);
             $table->enum('payment_status', ['pending', 'paid', 'failed', 'refunded']);
             $table->enum('payment_method', ['credit_card', 'bank_transfer', 'e-wallet', 'other']);
             $table->date('payment_date');
