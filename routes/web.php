@@ -53,8 +53,6 @@ Route::get('/register', function () {
 
 //dhafin
 
-// Route untuk homepage
-Route::get('/', [BackController::class, 'home'])->name('user.home');
 // Cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
