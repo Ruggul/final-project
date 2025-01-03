@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InventoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,13 @@ Route::prefix('keranjang')->group(function () {
     Route::delete('/kosongkan/{id_pengguna}', [CartController::class, 'clearCart']); // Mengosongkan keranjang
     Route::get('/total/{id_pengguna}', [CartController::class, 'calculateTotal']); // Menghitung total harga
     Route::put('/keranjang/perbarui', [CartController::class, 'updateQuantity']); // Memperbarui kuantitas produk
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory', [InventoryController::class, 'tambahBarang'])->name('inventory.store');
+    Route::post('/inventory/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
+    Route::post('/inventory/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
 
 
