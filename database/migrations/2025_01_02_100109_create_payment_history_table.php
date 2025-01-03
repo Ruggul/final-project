@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('payment_history', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('factory_id')->constrained('factory')->onDelete('cascade');
             $table->string('invoice_number')->unique();
             $table->decimal('amount', 12, 2);
             $table->enum('payment_status', ['pending', 'paid', 'failed', 'refunded']);
