@@ -2,60 +2,129 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Factory;
+use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class FactoryController extends Controller
+class DocumentController extends Controller
 {
-    //Display a listing of the resource.
+    /**
+     * Display a listing of the documents.
+     */
     public function index()
     {
-        $factories = Factory::paginate(10);
-        return view('factories.index', compact('factories'));
+        $documents = Document::latest()->get();
+        return view('user.userAccount.document', compact('documents'));
     }
 
-    //Show the form for creating a new resource.
+    /**
+     * Show the form for creating a new document.
+     */
     public function create()
     {
-        return view('factories.create');
+        return view('user.userAccount.document-create');
     }
 
-    //Store a newly created resource in storage.
+    /**
+     * Store a newly created document in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate(Factory::$rules);
-        Factory::create($request->all());
-        return redirect()->route('factories.index')->with('success', 'Factory created successfully');
+        $request->validate([
+            'document_type' => 'required|string|max:255',
+            'document_name' => 'required|string|max:255',
+            'document_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date|after:today',
+        ]);
+
+        try {
+            // Handle file upload
+            $filePath = $request->file('document_file')->store('documents', 'public');
+
+            // Create document record
+            Document::create([
+                'document_type' => $request->document_type,
+                'document_name' => $request->document_name,
+                'file_path' => $filePath,
+                'expiry_date' => $request->expiry_date,
+            ]);
+
+            return redirect()->route('documents.index')
+                           ->with('success', 'Document uploaded successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to upload document. Please try again.');
+        }
     }
 
-    //Display the specified resource.
-    public function show(string $id)
+    /**
+     * Display the specified document.
+     */
+    public function show(Document $document)
     {
-        $factory = Factory::findOrFail($id);
-        return view('factories.show', compact('factory'));
+        return view('user.userAccount.document-show', compact('document'));
     }
 
-    //Show the form for editing the specified resource.
-    public function edit(string $id)
+    /**
+     * Show the form for editing the specified document.
+     */
+    public function edit(Document $document)
     {
-        $factory = Factory::findOrFail($id);
-        return view('factories.edit', compact('factory'));
+        return view('user.userAccount.document-edit', compact('document'));
     }
 
-    //Update the specified resource in storage.
-    public function update(Request $request, string $id)
+    /**
+     * Update the specified document in storage.
+     */
+    public function update(Request $request, Document $document)
     {
-        $factory = Factory::findOrFail($id);
-        $request->validate(Factory::$rules);
-        $factory->update($request->all());
-        return redirect()->route('factories.index')->with('success', 'Factory updated successfully');
+        $request->validate([
+            'document_type' => 'required|string|max:255',
+            'document_name' => 'required|string|max:255',
+            'document_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date|after:today',
+        ]);
+
+        try {
+            // Handle file upload if new file is provided
+            if ($request->hasFile('document_file')) {
+                // Delete old file
+                Storage::disk('public')->delete($document->file_path);
+                
+                // Store new file
+                $filePath = $request->file('document_file')->store('documents', 'public');
+                $document->file_path = $filePath;
+            }
+
+            // Update document record
+            $document->update([
+                'document_type' => $request->document_type,
+                'document_name' => $request->document_name,
+                'expiry_date' => $request->expiry_date,
+            ]);
+
+            return redirect()->route('documents.index')
+                           ->with('success', 'Document updated successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to update document. Please try again.');
+        }
     }
 
-    //Remove the specified resource from storage.
-    public function destroy(string $id)
+    /**
+     * Remove the specified document from storage.
+     */
+    public function destroy(Document $document)
     {
-        $factory = Factory::findOrFail($id);
-        $factory->delete();
-        return redirect()->route('factories.index')->with('success', 'Factory deleted successfully');
+        try {
+            // Delete file from storage
+            Storage::disk('public')->delete($document->file_path);
+            
+            // Delete document record
+            $document->delete();
+
+            return redirect()->route('documents.index')
+                           ->with('success', 'Document deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to delete document. Please try again.');
+        }
     }
 }
