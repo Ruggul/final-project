@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('satuan');
             $table->decimal('harga_satuan', 12, 2);
             $table->string('lokasi_penyimpanan')->nullable();
-            $table->foreignId('category_id')->constrained();
             $table->timestamps();
         });
     }

@@ -15,12 +15,11 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call([
-            userSeeder::class,
-        ]);
         // $this->call([
-        //     CategorySeeder::class,
-        //     ItemSeeder::class,
+        //     userSeeder::class,
         // ]);
+        $this->call([
+            ItemSeeder::class,
+        ]);
     }
 }
