@@ -58,20 +58,7 @@
             <x-input-error for="address" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="password" value="{{ __('New Password') }}" />
-            <x-input id="password" type="password" class="mt-1 block w-full" wire:model="state.password" autocomplete="new-password" />
-            <x-input-error for="password" class="mt-2" />
-            <p class="text-sm text-gray-500 mt-1">Leave blank if you don't want to change the password</p>
-        </div>
-
-        <!-- Password Confirmation -->
-        <div class="col-span-6 sm:col-span-4">
-            <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-            <x-input id="password_confirmation" type="password" class="mt-1 block w-full" wire:model="state.password_confirmation" autocomplete="new-password" />
-            <x-input-error for="password_confirmation" class="mt-2" />
-        </div>
+        
     </x-slot>
 
     <x-slot name="actions">
