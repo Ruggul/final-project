@@ -4,13 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
     public function index()
     {
-        $barang = Item::all();
-        return view('factory.home', compact('barang'));
+        // Debug untuk melihat apakah data ada
+        // dd(Item::all());
+        
+        // Mengambil semua data dari tabel items
+        $barang = DB::table('items')->get();
+        
+        // Debug untuk melihat data yang dikirim ke view
+        // dd($barang);
+        
+        // Kirim data ke view
+        return view('factory.home', ['barang' => $barang]);
     }
 
     public function tambahBarang(Request $request)

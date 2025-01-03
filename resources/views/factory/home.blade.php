@@ -9,6 +9,11 @@
             <h5>Daftar Barang</h5>
         </div>
         <div class="card-body">
+            <!-- Debug untuk melihat data -->
+            @if(isset($barang))
+                <!-- {{ print_r($barang) }} -->
+            @endif
+
             <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
                 Tambah Barang Baru
             </button>
@@ -18,32 +23,36 @@
                     <tr>
                         <th>Kode</th>
                         <th>Nama Barang</th>
-                        <th>Kategori</th>
                         <th>Stok</th>
                         <th>Satuan</th>
                         <th>Harga</th>
+                        <th>Lokasi</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($barang as $item)
-                    <tr>
-                        <td>{{ $item->kode_barang }}</td>
-                        <td>{{ $item->nama_barang }}</td>
-                        <td>{{ $item->category->name }}</td>
-                        <td>{{ $item->stok }}</td>
-                        <td>{{ $item->satuan }}</td>
-                        <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-success" onclick="barangMasuk({{ $item->id }})">
-                                Barang Masuk
-                            </button>
-                            <button class="btn btn-sm btn-warning" onclick="barangKeluar({{ $item->id }})">
-                                Barang Keluar
-                            </button>
-                        </td>
-                    </tr>
-                    @endforeach
+                    @forelse($barang as $item)
+                        <tr>
+                            <td>{{ $item->kode_barang }}</td>
+                            <td>{{ $item->nama_barang }}</td>
+                            <td>{{ $item->stok }}</td>
+                            <td>{{ $item->satuan }}</td>
+                            <td>Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
+                            <td>{{ $item->lokasi_penyimpanan }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-success" onclick="barangMasuk({{ $item->id }})">
+                                    Masuk
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="barangKeluar({{ $item->id }})">
+                                    Keluar
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center">Tidak ada data barang</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
