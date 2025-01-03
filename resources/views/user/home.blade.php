@@ -12,9 +12,7 @@
     <nav class="bg-green-600 text-white p-4 fixed w-full z-50">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-8">
-                <a href="{{ route('user.home') }}" class="flex items-center">
-                    <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" class="h-8 filter brightness-0 invert">
-                </a>
+                <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" class="h-8 filter brightness-0 invert">
                 <div class="flex-1 max-w-2xl">
                     <div class="relative">
                         <input type="text" placeholder="Cari produk" class="w-full px-4 py-2 rounded-lg text-gray-900 focus:outline-none">

@@ -11,7 +11,7 @@
     <!-- Navbar -->
     <nav class="bg-green-600 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="{{ route('user.home') }}" class="flex items-center">
+            <a href="#" class="flex items-center">
                 <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" 
                      class="h-8 filter brightness-0 invert">
             </a>
@@ -104,7 +104,7 @@
         @else
             <div class="bg-white rounded-lg shadow-md p-6 text-center">
                 <p class="text-gray-500 mb-4">Keranjang belanja Anda kosong</p>
-                <a href="{{ route('user.home') }}" class="text-green-600 hover:text-green-700">
+                <a href="#" class="text-green-600 hover:text-green-700">
                     Lanjutkan Belanja
                 </a>
             </div>
