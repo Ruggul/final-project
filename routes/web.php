@@ -5,10 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\ProductController;
-
 use App\Http\Controllers\TopUpController;
-
+use App\Http\Controllers\DocumentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -87,12 +85,9 @@ Route::prefix('inventory')->group(function () {
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('products', ProductController::class);
-});
 //iky
 
-Route::middleware(['auth'])->group(function () {
+
     // TopUp Routes
     Route::prefix('topups')->group(function () {
         // Show topup history
@@ -112,6 +107,38 @@ Route::middleware(['auth'])->group(function () {
 
         // Verify payment
         Route::post('/{topup}/verify', [TopUpController::class, 'verify'])->name('topups.verify');
-    });
+});
+
+//kevin
+    // Document Routes
+    Route::prefix('documents')->group(function () {
+        // List view documents
+        Route::get('/', [DocumentController::class, 'index'])
+            ->name('documents.index');
+
+
+        // Create new document
+        Route::get('/create', [DocumentController::class, 'create'])
+            ->name('documents.create');
+        
+        // Store new document
+        Route::post('/', [DocumentController::class, 'store'])
+            ->name('documents.store');
+
+        // Show document details
+        Route::get('/{document}', [DocumentController::class, 'show'])
+            ->name('documents.show');
+
+        // Edit document form
+        Route::get('/{document}/edit', [DocumentController::class, 'edit'])
+            ->name('documents.edit');
+
+        // Update document
+        Route::put('/{document}', [DocumentController::class, 'update'])
+            ->name('documents.update');
+
+        // Delete document
+        Route::delete('/{document}', [DocumentController::class, 'destroy'])
+            ->name('documents.destroy');
 });
 
