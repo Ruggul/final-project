@@ -7,6 +7,8 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\Admin\LastLoginController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -140,5 +142,9 @@ Route::prefix('inventory')->group(function () {
         // Delete document
         Route::delete('/{document}', [DocumentController::class, 'destroy'])
             ->name('documents.destroy');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/last-login', [LastLoginController::class, 'index'])->name('admin.last-login');
 });
 

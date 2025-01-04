@@ -57,4 +57,47 @@ class AdminController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function updateProduct(Request $request, $id)
+    {
+        try {
+            $product = Item::findOrFail($id);
+            $product->update($request->all());
+            
+            return response()->json([
+                'message' => 'Produk berhasil diperbarui',
+                'data' => $product
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function storeProduct(Request $request)
+    {
+        try {
+            $product = Item::create($request->all());
+            
+            return response()->json([
+                'message' => 'Produk berhasil ditambahkan',
+                'data' => $product
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteProduct($id)
+    {
+        try {
+            $product = Item::findOrFail($id);
+            $product->delete();
+            
+            return response()->json([
+                'message' => 'Produk berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

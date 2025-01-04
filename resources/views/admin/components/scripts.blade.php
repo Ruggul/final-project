@@ -1,15 +1,15 @@
 <script>
     function showContent(contentId) {
-        // Hide all content sections
+    
         document.getElementById('overview-content').classList.add('hidden');
         document.getElementById('users-content').classList.add('hidden');
         document.getElementById('products-content').classList.add('hidden');
         document.getElementById('statistics-content').classList.add('hidden');
 
-        // Show selected content
+        
         document.getElementById(contentId + '-content').classList.remove('hidden');
 
-        // Jika memilih menu users, load data users
+       
         if(contentId === 'users') {
             loadUsers();
         }
@@ -207,7 +207,7 @@
         e.preventDefault();
         const id = document.getElementById('editProductId').value;
         
-        // Log data yang akan dikirim
+        
         const formData = {
             nama_barang: document.getElementById('editNamaBarang').value,
             deskripsi: document.getElementById('editDeskripsi').value,
@@ -280,7 +280,7 @@
         loadTotalStock();
         loadLowStock();
         
-        // Refresh setiap 10 detik
+        
         setInterval(() => {
             loadTotalUsers();
             loadTotalProducts();

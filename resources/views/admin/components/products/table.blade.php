@@ -15,7 +15,7 @@
         <tbody id="productsTableBody">
             @if(isset($items))
                 @foreach($items as $product)
-                    <tr class="border-b hover:bg-gray-50">
+                    <tr class="border-b hover:bg-gray-50" data-product-id="{{ $product->id }}">
                         <td class="px-6 py-4">{{ $product->kode_barang }}</td>
                         <td class="px-6 py-4">
                             <div class="flex flex-col">
@@ -29,19 +29,22 @@
                         <td class="px-6 py-4">{{ $product->lokasi }}</td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-2">
-                                <a href="{{ route('admin.products.edit', $product->id) }}" 
-                                   class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                <button onclick="openEditModal({
+                                    id: '{{ $product->id }}',
+                                    kode_barang: '{{ $product->kode_barang }}',
+                                    nama_barang: '{{ $product->nama_barang }}',
+                                    deskripsi: '{{ $product->deskripsi }}',
+                                    stok: '{{ $product->stok }}',
+                                    satuan: '{{ $product->satuan }}',
+                                    harga_satuan: '{{ $product->harga_satuan }}',
+                                    lokasi: '{{ $product->lokasi }}'
+                                })" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                                     Edit
-                                </a>
-                                <form action="{{ route('admin.products.delete', $product->id) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
-                                        Delete
-                                    </button>
-                                </form>
+                                </button>
+                                <button onclick="deleteProduct('{{ $product->id }}')" 
+                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                    Delete
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -96,3 +99,116 @@
         </form>
     </div>
 </div> 
+
+<script>
+function openEditModal(product) {
+    // Populate modal with product data
+    document.getElementById('editProductId').value = product.id;
+    document.getElementById('editKodeBarang').value = product.kode_barang;
+    document.getElementById('editNamaBarang').value = product.nama_barang;
+    document.getElementById('editDeskripsi').value = product.deskripsi;
+    document.getElementById('editStok').value = product.stok;
+    document.getElementById('editSatuan').value = product.satuan;
+    document.getElementById('editHargaSatuan').value = product.harga_satuan;
+    document.getElementById('editLokasi').value = product.lokasi;
+    
+    // Show modal
+    document.getElementById('editModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+}
+
+// Handle form submission for editing
+document.getElementById('editForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const productId = document.getElementById('editProductId').value;
+    const formData = {
+        kode_barang: document.getElementById('editKodeBarang').value,
+        nama_barang: document.getElementById('editNamaBarang').value,
+        deskripsi: document.getElementById('editDeskripsi').value,
+        stok: document.getElementById('editStok').value,
+        satuan: document.getElementById('editSatuan').value,
+        harga_satuan: document.getElementById('editHargaSatuan').value,
+        lokasi: document.getElementById('editLokasi').value
+    };
+
+    try {
+        const response = await fetch(`/api/products/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+            alert('Produk berhasil diperbarui');
+            closeEditModal();
+            location.reload(); // Reload to show updated data
+        } else {
+            const error = await response.json();
+            alert('Error: ' + error.message);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+// Update the table row to include edit button
+function updateTableRows() {
+    const rows = document.querySelectorAll('#productsTableBody tr');
+    rows.forEach(row => {
+        const product = {
+            id: row.dataset.productId,
+            kode_barang: row.querySelector('td:nth-child(1)').textContent,
+            nama_barang: row.querySelector('td:nth-child(2)').textContent,
+            deskripsi: row.querySelector('td:nth-child(3)').textContent,
+            stok: row.querySelector('td:nth-child(4)').textContent,
+            satuan: row.querySelector('td:nth-child(5)').textContent,
+            harga_satuan: row.querySelector('td:nth-child(6)').textContent.replace('Rp ', '').replace(',', ''),
+            lokasi: row.querySelector('td:nth-child(7)').textContent
+        };
+
+        const editButton = row.querySelector('.bg-blue-500');
+        editButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            openEditModal(product);
+        });
+    });
+}
+
+// Handle delete
+async function deleteProduct(id) {
+    if (!confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/products/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        });
+
+        if (response.ok) {
+            alert('Produk berhasil dihapus');
+            location.reload(); // Reload to update the table
+        } else {
+            const error = await response.json();
+            alert('Error: ' + error.message);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+}
+
+// Initialize when document loads
+document.addEventListener('DOMContentLoaded', function() {
+    updateTableRows();
+});
+</script> 
