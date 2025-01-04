@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="bg-green-600 text-white p-4">
+    <nav class="bg-blue-700 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             <a href="{{ url('/redirect') }}" class="flex items-center">
                 <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" 
@@ -22,7 +22,7 @@
             <h1 class="text-2xl font-bold mb-6">Detail Pemesanan #{{ $order->id }}</h1>
 
             @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
                 </div>
             @endif
@@ -73,7 +73,7 @@
             <!-- Tombol Kembali -->
             <div class="text-center">
                 <a href="{{ url('/redirect') }}" 
-                   class="inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                   class="inline-block bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
                     Kembali ke Home
                 </a>
             </div>

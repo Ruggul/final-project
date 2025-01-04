@@ -9,7 +9,7 @@
 </head>
 <body class="bg-gray-100">
     <!-- Navbar -->
-    <nav class="bg-green-600 text-white p-4">
+    <nav class="bg-blue-700 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             <a href="{{ url('/redirect') }}" class="flex items-center">
                 <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" 
@@ -23,7 +23,7 @@
         <h1 class="text-2xl font-bold mb-6">Keranjang Belanja</h1>
 
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
                 {{ session('success') }}
             </div>
         @endif
@@ -102,7 +102,7 @@
                         <p class="text-lg font-bold">Total: Rp {{ number_format($total) }}</p>
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                            <button type="submit" class="mt-4 bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
                                 Checkout
                             </button>
                         </form>
@@ -112,7 +112,7 @@
         @else
             <div class="bg-white rounded-lg shadow-md p-6 text-center">
                 <p class="text-gray-500 mb-4">Keranjang belanja Anda kosong</p>
-                <a href="{{ url('/redirect') }}" class="text-green-600 hover:text-green-700">
+                <a href="{{ url('/redirect') }}" class="text-blue-700 hover:text-blue-800">
                     Lanjutkan Belanja
                 </a>
             </div>

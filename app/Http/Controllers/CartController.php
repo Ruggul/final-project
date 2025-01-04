@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function index()
+    public function index() // Menampilkan halaman keranjang
     {
         // Mengambil cart dari session
         $cartItems = session()->get('cart', []);
@@ -46,7 +46,7 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
-    public function update(Request $request)
+    public function update(Request $request) // Memperbarui jumlah item di keranjang
     {
         if($request->id && $request->quantity){
             $cart = session()->get('cart');
@@ -68,7 +68,7 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang!');
     }
 
-    public function clear()
+    public function clear() // Menghapus semua item di keranjang
     {
         session()->forget('cart');
         return redirect()->back()->with('success', 'Keranjang berhasil dikosongkan!');
@@ -122,7 +122,7 @@ class CartController extends Controller
         }
     }
 
-    public function showOrder(Order $order)
+    public function showOrder(Order $order) // Menampilkan detail order
     {
         // Pastikan user hanya bisa melihat ordernya sendiri
         if ($order->user_id !== auth()->id()) {
