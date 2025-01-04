@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-gray-100">
-    <div class="ml-64 flex-1">
-        @include('admin.components.header')
+    
         
         <!-- Navbar -->
         <nav class="bg-green-600 text-white p-4">
