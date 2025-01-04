@@ -8,8 +8,13 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\DocumentController;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 use App\Http\Controllers\Admin\LastLoginController;
 
+=======
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+>>>>>>> Stashed changes
 =======
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
@@ -150,11 +155,14 @@ Route::prefix('inventory')->group(function () {
 });
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/last-login', [LastLoginController::class, 'index'])->name('admin.last-login');
 });
 
 =======
+=======
+>>>>>>> Stashed changes
 
 // Public Routes
 Route::get('/', function () {
@@ -183,5 +191,9 @@ Route::get('/redirect', function() {
     return redirect('/');
 })->name('redirect');
 
+<<<<<<< Updated upstream
+require __DIR__.'/auth.php';
+>>>>>>> Stashed changes
+=======
 require __DIR__.'/auth.php';
 >>>>>>> Stashed changes
