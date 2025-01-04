@@ -52,19 +52,29 @@ class TopUpController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:10000',
-            'payment_method' => 'required|in:bank_transfer,e_wallet'
+            'payment_method' => 'required|in:e_wallet,bank_transfer,cash', // Sesuaikan dengan opsi valid
         ]);
-
-        $topup = TopUp::create([
-            'user_id' => Auth::id(),
-            'amount' => $request->amount,
-            'payment_method' => $request->payment_method,
-            'status' => 'pending'
-        ]);
-
-        return redirect()->route('topups.show', $topup)
-                        ->with('success', 'TopUp berhasil dibuat. Silakan lakukan pembayaran.');
+    
+        // Tambahkan logging untuk debugging
+        \Log::info('Payment Method: ' . $request->payment_method);
+        \Log::info('Amount: ' . $request->amount);
+    
+        try {
+            // Simpan data ke database
+            TopUp::create([
+                'user_id' => auth()->id(),
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+            ]);
+    
+            return redirect()->back()->with('success', 'Top-up berhasil!');
+        } catch (\Exception $e) {
+            \Log::error('Error in TopUpController@store: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
+        }
     }
+    
 
     public function show(TopUp $topup)
     {
