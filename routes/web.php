@@ -144,3 +144,32 @@ Route::prefix('inventory')->group(function () {
             ->name('documents.destroy');
 });
 
+
+// Public Routes
+Route::get('/', function () {
+    return view('welcome');
+});
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Profile Routes
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
+            
+        Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
+            
+        Route::put('/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    });
+
+    // Logout Route
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Redirect Route (mentioned in dashboard view)
+Route::get('/redirect', function() {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect('/');
+})->name('redirect');
+
+require __DIR__.'/auth.php';
