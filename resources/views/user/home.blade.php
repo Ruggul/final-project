@@ -33,14 +33,22 @@
                     <i class="fas fa-bell text-xl"></i>
                 </a>
                 <!-- User Profile Dropdown -->
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" class="hover:text-gray-200">
+                <div class="relative" x-data="{ isOpen: false }">
+                    <button @click="isOpen = !isOpen" 
+                            type="button"
+                            class="hover:text-gray-200 focus:outline-none">
                         <i class="fas fa-user text-xl"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div x-show="open" 
-                         @click.away="open = false" 
+                    <div x-show="isOpen" 
+                         @click.outside="isOpen = false"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
                          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
                          style="display: none;">
                         <!-- Profile -->
