@@ -9,10 +9,11 @@
                         <th class="px-6 py-3 text-left">Nama</th>
                         <th class="px-6 py-3 text-left">Email</th>
                         <th class="px-6 py-3 text-center">Role</th>
+                        <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
-                    <!-- Data akan diisi melalui JavaScript -->
+                    
                 </tbody>
             </table>
         </div>

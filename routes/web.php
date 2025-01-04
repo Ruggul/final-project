@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductController;
 
 
 /*
@@ -83,4 +84,8 @@ Route::prefix('inventory')->group(function () {
     Route::delete('/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
     Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('products', ProductController::class);
 });

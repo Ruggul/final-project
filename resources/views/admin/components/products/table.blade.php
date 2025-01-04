@@ -8,11 +8,49 @@
                 <th class="px-6 py-3 text-left">Stok</th>
                 <th class="px-6 py-3 text-left">Satuan</th>
                 <th class="px-6 py-3 text-left">Harga Satuan</th>
+                <th class="px-6 py-3 text-left">Lokasi</th>
                 <th class="px-6 py-3 text-left">Aksi</th>
             </tr>
         </thead>
         <tbody id="productsTableBody">
-            <!-- Data will be populated by JavaScript -->
+            @if(isset($items))
+                @foreach($items as $product)
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">{{ $product->kode_barang }}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="font-medium">{{ $product->nama_barang }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">{{ $product->deskripsi }}</td>
+                        <td class="px-6 py-4">{{ $product->stok }}</td>
+                        <td class="px-6 py-4">{{ $product->satuan }}</td>
+                        <td class="px-6 py-4">Rp {{ number_format($product->harga_satuan) }}</td>
+                        <td class="px-6 py-4">{{ $product->lokasi }}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex space-x-2">
+                                <a href="{{ route('admin.products.edit', $product->id) }}" 
+                                   class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                    Edit
+                                </a>
+                                <form action="{{ route('admin.products.delete', $product->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="8" class="px-6 py-4 text-center">Tidak ada data produk</td>
+                </tr>
+            @endif
         </tbody>
     </table>
 </div>
@@ -46,6 +84,10 @@
             <div class="mb-4">
                 <label class="block mb-2">Harga Satuan</label>
                 <input type="number" step="0.01" id="editHargaSatuan" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2">Lokasi</label>
+                <input type="text" id="editLokasi" class="w-full border rounded px-3 py-2">
             </div>
             <div class="flex justify-end gap-2 mt-6">
                 <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Batal</button>
