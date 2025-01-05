@@ -1,76 +1,84 @@
-<div>
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6">
-                    <h1 class="text-xl font-medium text-gray-900 mb-4">
-                        Factory Management System
-                    </h1>
+@extends('layouts.app')
 
-                    <!-- Quick Stats -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <!-- Total Products -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-blue-100">
-                                    <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-500">Total Products</p>
-                                    <p class="text-lg font-semibold">150</p>
-                                </div>
-                            </div>
-                        </div>
+@section('content')
+<div class="flex h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <div class="fixed w-64 h-full bg-gray-800">
+        <div class="flex items-center justify-center h-20 shadow-md">
+            <h1 class="text-3xl uppercase text-white">Factory</h1>
+        </div>
 
-                        <!-- Low Stock -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-yellow-100">
-                                    <svg class="h-5 w-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-500">Low Stock</p>
-                                    <p class="text-lg font-semibold">12</p>
-                                </div>
-                            </div>
-                        </div>
+        <nav class="py-5">
+            <!-- Factory Account Menu -->
+            <div x-data="{ open: false }">
+                <button @click="open = !open" 
+                        class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
+                    <span class="flex items-center">
+                        <i class="fas fa-users mr-3"></i>
+                        Factory Account
+                    </span>
+                    <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
+                </button>
+                <div x-show="open" class="bg-gray-700">
+                    <a href="{{ route('factoryUser.index') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-list mr-3"></i>List Users
+                    </a>
+                    <a href="{{ route('factoryUser.create') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-plus mr-3"></i>Add User
+                    </a>
+                </div>
+            </div>
 
-                        <!-- Out of Stock -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-red-100">
-                                    <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-500">Out of Stock</p>
-                                    <p class="text-lg font-semibold">5</p>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Inventory Management Menu -->
+            <div x-data="{ open: false }">
+                <button @click="open = !open" 
+                        class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
+                    <span class="flex items-center">
+                        <i class="fas fa-box mr-3"></i>
+                        Inventory
+                    </span>
+                    <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
+                </button>
+                <div x-show="open" class="bg-gray-700">
+                    <a href="#inventory-list" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-list mr-3"></i>Stock List
+                    </a>
+                    <a href="#stock-movement" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-exchange-alt mr-3"></i>Stock Movement
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
 
-                        <!-- Categories -->
-                        <div class="bg-white p-4 rounded-lg shadow">
-                            <div class="flex items-center">
-                                <div class="p-3 rounded-full bg-green-100">
-                                    <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-                                    </svg>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray-500">Categories</p>
-                                    <p class="text-lg font-semibold">8</p>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Main Content -->
+    <div class="ml-64 flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md py-4 px-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Factory Dashboard</h2>
+                <div class="flex items-center space-x-4">
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center space-x-2">
+                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=Admin' }}" 
+                                 class="h-8 w-8 rounded-full">
+                            <span>{{ Auth::user()->name }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
+            <div class="container mx-auto px-6 py-8">
+                @livewire('factory-dashboard')
+            </div>
+        </main>
     </div>
-</div> 
+</div>
+@endsection
