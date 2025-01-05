@@ -32,13 +32,13 @@
                     </div>
 
                     <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        {{ __('Profile') }}
+                    </a>
+
+                    <a href="{{ route('topups.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                         {{ __('TopUp') }}
                     </a>
-
-                    <a href="{{ route('topups.history') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        {{ __('History') }}
-                    </a>
-
+                    
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

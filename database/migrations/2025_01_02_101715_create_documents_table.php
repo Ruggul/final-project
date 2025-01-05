@@ -17,7 +17,11 @@ return new class extends Migration
             $table->string('document_name');
             $table->string('file_path');
             $table->date('expiry_date')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

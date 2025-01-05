@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-gray-100">
-    <
+    <body class="bg-gray-100">
+        @include('user.component.header')
         
     <!-- Navbar -->
     <nav class="bg-blue-700 text-white p-4 fixed w-full z-50">

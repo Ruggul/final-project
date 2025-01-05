@@ -112,9 +112,6 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
 
         // Verify payment
         Route::post('/{topup}/verify', [TopUpController::class, 'verify'])->name('topups.verify');
-
-        // Show topup history
-        Route::get('/history', [TopUpController::class, 'history'])->name('topups.history');
 });
 
 //kevin
@@ -150,9 +147,7 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
             ->name('documents.destroy');
 });
 
-Route::put('/api/products/{id}', [AdminController::class, 'updateProduct'])->name('products.update');
 
-Route::delete('/api/users/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
 
 
 

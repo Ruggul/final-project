@@ -22,7 +22,7 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        return view('Documents.create');
+        return view('inventory.document');
     }
 
     /**
