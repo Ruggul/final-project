@@ -24,7 +24,7 @@
                 <!-- Login / Register -->
                 <div class="flex items-center space-x-3">
                     <a href="{{ route('login') }}" class="py-2 px-4 font-medium text-gray-500 hover:text-blue-500 transition duration-300">Login</a>
-                    <a href="{{ route('password') }}" class="py-2 px-4 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300">Register</a>
+                    <a href="{{ route('register') }}" class="py-2 px-4 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300">Register</a>
                 </div>
             </div>
         </div>
