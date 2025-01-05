@@ -28,9 +28,28 @@
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
                         <i class="fas fa-plus mr-3"></i>Add Item
                     </a>
-                    <a href="{{ route('inventory.history') }}" 
+                    
+                </div>
+            </div>
+
+            <!-- Document Menu -->
+            <div x-data="{ open: false }">
+                <button @click="open = !open" 
+                        class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
+                    <span class="flex items-center">
+                        <i class="fas fa-file-invoice fa-lg mr-3"></i>
+                        Documents
+                    </span>
+                    <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
+                </button>
+                <div x-show="open" class="bg-gray-700">
+                    <a href="{{ route('documents.index') }}" 
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
-                        <i class="fas fa-history mr-3"></i>Stock History
+                        <i class="fas fa-file-alt mr-3"></i>Document List
+                    </a>
+                    <a href="{{ route('documents.create') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-file-medical mr-3"></i>Add Document
                     </a>
                 </div>
             </div>

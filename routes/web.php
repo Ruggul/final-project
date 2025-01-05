@@ -111,6 +111,9 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
 
         // Verify payment
         Route::post('/{topup}/verify', [TopUpController::class, 'verify'])->name('topups.verify');
+
+        // Show topup history
+        Route::get('/history', [TopUpController::class, 'history'])->name('topups.history');
 });
 
 //kevin

@@ -106,4 +106,13 @@ class TopUpController extends Controller
         return redirect()->route('topups.index')
                         ->with('success', 'TopUp dibatalkan.');
     }
+
+    public function history()
+    {
+        // Jika Anda memiliki model untuk history pergerakan stok
+        // $movements = StockMovement::with('item')->latest()->paginate(10);
+        // return view('inventory.history', compact('movements'));
+        
+        return view('topups.history');
+    }
 }

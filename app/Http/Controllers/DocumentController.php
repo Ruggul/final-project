@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
@@ -13,7 +14,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $documents = Document::latest()->get();
+        $documents = Document::latest()->paginate(10);
         return view('user.userAccount.document', compact('documents'));
     }
 
@@ -22,7 +23,14 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        return view('user.userAccount.document-create');
+        $documentTypes = [
+            'SOP' => 'Standard Operating Procedure',
+            'Manual' => 'Manual Book',
+            'Report' => 'Report Document',
+            'Form' => 'Form Document',
+            'Other' => 'Other Document'
+        ];
+        return view('user.userAccount.document-create', compact('documentTypes'));
     }
 
     /**
@@ -33,13 +41,21 @@ class DocumentController extends Controller
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'document_file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
             'expiry_date' => 'nullable|date|after:today',
         ]);
 
         try {
+            // Generate unique filename
+            $fileName = time() . '_' . Str::slug($request->document_name) . '.' . 
+                       $request->file('document_file')->getClientOriginalExtension();
+
             // Handle file upload
-            $filePath = $request->file('document_file')->store('documents', 'public');
+            $filePath = $request->file('document_file')->storeAs(
+                'documents',
+                $fileName,
+                'public'
+            );
 
             // Create document record
             Document::create([
@@ -50,9 +66,10 @@ class DocumentController extends Controller
             ]);
 
             return redirect()->route('documents.index')
-                           ->with('success', 'Document uploaded successfully.');
+                           ->with('success', 'Document berhasil diunggah.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to upload document. Please try again.');
+            return back()->with('error', 'Gagal mengunggah dokumen.')
+                        ->withInput();
         }
     }
 
@@ -61,6 +78,10 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
+        if (!Storage::disk('public')->exists($document->file_path)) {
+            return back()->with('error', 'File dokumen tidak ditemukan.');
+        }
+
         return view('user.userAccount.document-show', compact('document'));
     }
 
@@ -69,7 +90,14 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
-        return view('user.userAccount.document-edit', compact('document'));
+        $documentTypes = [
+            'SOP' => 'Standard Operating Procedure',
+            'Manual' => 'Manual Book',
+            'Report' => 'Report Document',
+            'Form' => 'Form Document',
+            'Other' => 'Other Document'
+        ];
+        return view('user.userAccount.document-edit', compact('document', 'documentTypes'));
     }
 
     /**
@@ -80,32 +108,46 @@ class DocumentController extends Controller
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'document_file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
             'expiry_date' => 'nullable|date|after:today',
         ]);
 
         try {
-            // Handle file upload if new file is provided
-            if ($request->hasFile('document_file')) {
-                // Delete old file
-                Storage::disk('public')->delete($document->file_path);
-                
-                // Store new file
-                $filePath = $request->file('document_file')->store('documents', 'public');
-                $document->file_path = $filePath;
-            }
-
-            // Update document record
-            $document->update([
+            $updateData = [
                 'document_type' => $request->document_type,
                 'document_name' => $request->document_name,
                 'expiry_date' => $request->expiry_date,
-            ]);
+            ];
+
+            // Handle file upload if new file is provided
+            if ($request->hasFile('document_file')) {
+                // Delete old file
+                if (Storage::disk('public')->exists($document->file_path)) {
+                    Storage::disk('public')->delete($document->file_path);
+                }
+                
+                // Generate unique filename
+                $fileName = time() . '_' . Str::slug($request->document_name) . '.' . 
+                           $request->file('document_file')->getClientOriginalExtension();
+
+                // Store new file
+                $filePath = $request->file('document_file')->storeAs(
+                    'documents',
+                    $fileName,
+                    'public'
+                );
+
+                $updateData['file_path'] = $filePath;
+            }
+
+            // Update document record
+            $document->update($updateData);
 
             return redirect()->route('documents.index')
-                           ->with('success', 'Document updated successfully.');
+                           ->with('success', 'Document berhasil diperbarui.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update document. Please try again.');
+            return back()->with('error', 'Gagal memperbarui dokumen.')
+                        ->withInput();
         }
     }
 
@@ -116,15 +158,17 @@ class DocumentController extends Controller
     {
         try {
             // Delete file from storage
-            Storage::disk('public')->delete($document->file_path);
+            if (Storage::disk('public')->exists($document->file_path)) {
+                Storage::disk('public')->delete($document->file_path);
+            }
             
             // Delete document record
             $document->delete();
 
             return redirect()->route('documents.index')
-                           ->with('success', 'Document deleted successfully.');
+                           ->with('success', 'Document berhasil dihapus.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete document. Please try again.');
+            return back()->with('error', 'Gagal menghapus dokumen.');
         }
     }
 }
