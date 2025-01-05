@@ -7,6 +7,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,6 +73,9 @@ Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.rem
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::get('/orders/{order}', [CartController::class, 'showOrder'])->name('orders.show');
+Route::get('/checkout/{order_id}', [App\Http\Controllers\PaymentController::class, 'checkout'])->name('payments.checkout');
+Route::post('/payments/process', [App\Http\Controllers\PaymentController::class, 'process'])->name('payments.process');
+Route::get('/payments/{payment}', [App\Http\Controllers\PaymentController::class, 'show'])->name('payments.show');
 
 // hasan
 Route::prefix('inventory')->group(function () {
@@ -141,4 +145,8 @@ Route::prefix('inventory')->group(function () {
         Route::delete('/{document}', [DocumentController::class, 'destroy'])
             ->name('documents.destroy');
 });
+
+
+
+
 
