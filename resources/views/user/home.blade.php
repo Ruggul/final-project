@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="flex items-center space-x-6">
-                <a href="{{route('/dashboard')}}" class="hover:text-gray-200">
+                <a href="{{route('cart')}}" class="hover:text-gray-200">
                     <i class="fas fa-shopping-cart text-xl"></i>
                 </a>
                 <a href="#" class="hover:text-gray-200">
