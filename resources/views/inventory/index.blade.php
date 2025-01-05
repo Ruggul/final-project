@@ -28,7 +28,10 @@
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
                         <i class="fas fa-plus mr-3"></i>Add Item
                     </a>
-                    
+                    <a href="{{ route('inventory.history') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-history mr-3"></i>Stock History
+                    </a>
                 </div>
             </div>
 
@@ -61,7 +64,7 @@
         <!-- Header -->
         <header class="bg-white shadow-md">
             <div class="flex justify-between items-center py-4 px-6">
-                <h2 class="text-xl font-semibold">Inventory List</h2>
+                <h2 class="text-xl font-semibold">Stock List</h2>
                 <div class="flex items-center space-x-4">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -77,76 +80,130 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
-                @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                        <span class="block sm:inline">{{ session('success') }}</span>
-                    </div>
-                @endif
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <!-- Filter dan Sorting -->
+                    <div class="mb-4 flex flex-wrap gap-4">
+                        <form action="{{ route('inventory.index') }}" method="GET" class="flex flex-wrap gap-4 w-full">
+                            <!-- Search Input -->
+                            <div class="flex-1 min-w-[200px]">
+                                <input type="text" 
+                                       name="search" 
+                                       value="{{ request('search') }}"
+                                       placeholder="Cari barang..." 
+                                       class="w-full px-4 py-2 border rounded-lg">
+                            </div>
 
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <div class="p-4 flex justify-between items-center border-b">
-                        <h3 class="text-lg font-semibold">Stock Items</h3>
-                        <a href="{{ route('inventory.create') }}" 
-                           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
-                            <i class="fas fa-plus mr-2"></i>Add New Item
-                        </a>
+                            <!-- Sort Select -->
+                            <div class="flex gap-2">
+                                <select name="sort" class="px-4 py-2 border rounded-lg">
+                                    <option value="kode_barang" {{ request('sort') == 'kode_barang' ? 'selected' : '' }}>Kode Barang</option>
+                                    <option value="nama_barang" {{ request('sort') == 'nama_barang' ? 'selected' : '' }}>Nama Barang</option>
+                                    <option value="stok" {{ request('sort') == 'stok' ? 'selected' : '' }}>Stok</option>
+                                    <option value="harga_satuan" {{ request('sort') == 'harga_satuan' ? 'selected' : '' }}>Harga</option>
+                                </select>
+
+                                <select name="direction" class="px-4 py-2 border rounded-lg">
+                                    <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>Ascending ↑</option>
+                                    <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Descending ↓</option>
+                                </select>
+
+                                <button type="submit" 
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                    Filter
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
-                    <table class="min-w-full">
-                        <thead>
-                            <tr class="bg-gray-50">
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Barang</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Stok</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Satuan</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Harga Satuan</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Lokasi</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @forelse($items as $item)
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
                                 <tr>
-                                    <td class="px-6 py-4">{{ $item->kode_barang }}</td>
-                                    <td class="px-6 py-4">{{ $item->nama_barang }}</td>
-                                    <td class="px-6 py-4">{{ $item->stok }}</td>
-                                    <td class="px-6 py-4">{{ $item->satuan }}</td>
-                                    <td class="px-6 py-4">Rp {{ number_format($item->harga_satuan) }}</td>
-                                    <td class="px-6 py-4">{{ $item->lokasi_penyimpanan }}</td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex space-x-2">
-                                            <a href="{{ route('inventory.edit', $item) }}" 
-                                               class="text-blue-500 hover:text-blue-700">
-                                                <i class="fas fa-edit"></i>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Kode Barang
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Nama Barang
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Stok
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Satuan
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Harga Satuan
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Lokasi
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($items as $item)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->kode_barang }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->nama_barang }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->stok }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->satuan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $item->lokasi_penyimpanan }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <a href="{{ route('inventory.edit', $item->id) }}" 
+                                               class="text-blue-600 hover:text-blue-900 mr-3">
+                                                <i class="fas fa-edit"></i> Edit
                                             </a>
-                                            <form method="POST" action="{{ route('inventory.destroy', $item) }}" 
-                                                  class="inline"
-                                                  onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                            <form action="{{ route('inventory.destroy', $item->id) }}" 
+                                                  method="POST" 
+                                                  class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-500 hover:text-red-700">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" 
+                                                        class="text-red-600 hover:text-red-900"
+                                                        onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')">
+                                                    <i class="fas fa-trash"></i> Hapus
                                                 </button>
                                             </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                        No items found
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                            Tidak ada data barang
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <div class="px-6 py-4">
-                        {{ $items->links() }}
+                    <!-- Pagination -->
+                    <div class="mt-4">
+                        {{ $items->appends(request()->query())->links() }}
                     </div>
                 </div>
             </div>
         </main>
     </div>
 </div>
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit form when sort or direction changes
+    const form = document.querySelector('form');
+    const selects = form.querySelectorAll('select');
+    
+    selects.forEach(select => {
+        select.addEventListener('change', () => {
+            form.submit();
+        });
+    });
+});
+</script>
+@endpush 

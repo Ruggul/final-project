@@ -7,9 +7,40 @@ use Illuminate\Http\Request;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::latest()->paginate(10);
+        // Debug untuk melihat parameter yang diterima
+        \Log::info('Search params:', $request->all());
+
+        $query = Item::query();
+
+        // Search
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('kode_barang', 'like', '%'.$search.'%')
+                  ->orWhere('nama_barang', 'like', '%'.$search.'%');
+            });
+        }
+
+        // Sort
+        $sortField = $request->input('sort', 'created_at');
+        $sortDirection = $request->input('direction', 'desc');
+
+        // Validasi field sorting
+        $allowedFields = ['kode_barang', 'nama_barang', 'stok', 'harga_satuan', 'created_at'];
+        if (in_array($sortField, $allowedFields)) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        $items = $query->paginate(10);
+
+        // Debug untuk melihat query yang dijalankan
+        \Log::info('Query:', [
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings()
+        ]);
+
         return view('inventory.index', compact('items'));
     }
 
@@ -20,43 +51,51 @@ class InventoryController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'kode_barang' => 'required|string|max:255|unique:items',
             'nama_barang' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
             'stok' => 'required|integer|min:0',
             'satuan' => 'required|string|max:50',
             'harga_satuan' => 'required|numeric|min:0',
-            'lokasi_penyimpanan' => 'required|string|max:255'
+            'lokasi_penyimpanan' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string'
         ]);
 
-        Item::create($validated);
+        Item::create($request->all());
 
         return redirect()->route('inventory.index')
-                        ->with('success', 'Item berhasil ditambahkan');
+            ->with('success', 'Barang berhasil ditambahkan');
     }
 
-    public function edit(Item $item)
+    public function show(Item $item)
     {
+        return view('inventory.show', compact('item'));
+    }
+
+    public function edit($id)
+    {
+        $item = Item::findOrFail($id);
         return view('inventory.edit', compact('item'));
     }
 
-    public function update(Request $request, Item $item)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $item->id,
+        $item = Item::findOrFail($id);
+        
+        $request->validate([
+            'kode_barang' => 'required|string|max:255|unique:items,kode_barang,' . $id,
             'nama_barang' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
             'stok' => 'required|integer|min:0',
             'satuan' => 'required|string|max:50',
             'harga_satuan' => 'required|numeric|min:0',
-            'lokasi_penyimpanan' => 'required|string|max:255'
+            'lokasi_penyimpanan' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string'
         ]);
 
-        $item->update($validated);
+        $item->update($request->all());
 
         return redirect()->route('inventory.index')
-                        ->with('success', 'Item berhasil diupdate');
+            ->with('success', 'Barang berhasil diperbarui');
     }
 
     public function destroy(Item $item)
@@ -64,15 +103,15 @@ class InventoryController extends Controller
         $item->delete();
 
         return redirect()->route('inventory.index')
-                        ->with('success', 'Item berhasil dihapus');
+            ->with('success', 'Barang berhasil dihapus');
     }
 
     public function history()
     {
-        // Jika Anda memiliki model untuk history pergerakan stok
-        // $movements = StockMovement::with('item')->latest()->paginate(10);
-        // return view('inventory.history', compact('movements'));
-        
-        return view('inventory.history');
+        $items = Item::with('stockHistories')
+            ->latest()
+            ->paginate(10);
+            
+        return view('inventory.history', compact('items'));
     }
 }

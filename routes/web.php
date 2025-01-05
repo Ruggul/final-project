@@ -87,7 +87,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::put('/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::get('/history', [InventoryController::class, 'history'])->name('inventory.history');
-});
+    Route::resource('inventory', InventoryController::class);
+    });
 
 //iky
 
