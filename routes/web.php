@@ -149,6 +149,8 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
             ->name('documents.destroy');
 });
 
+Route::delete('/api/products/{id}', [AdminController::class, 'deleteProduct']);
+
 
 
 
