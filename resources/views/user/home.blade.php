@@ -12,7 +12,7 @@
         @include('user.component.header')
         
     <!-- Navbar -->
-    <nav class="bg-purple-700 text-white p-4 fixed w-full z-50">
+    <nav class="bg-blue-700 text-white p-4 fixed w-full z-50">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-8">
                 <img src="{{ asset('design/tradeGateLogo.png') }}" alt="Logo" class="h-8 filter brightness-0 invert">
@@ -84,14 +84,14 @@
             <h2 class="text-lg font-semibold mb-4">Kategori</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
                 <a href="#" class="flex flex-col items-center p-2 hover:bg-gray-50 rounded-lg">
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-box text-purple-500"></i>
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-box text-blue-500"></i>
                     </div>
                     <span class="text-sm text-gray-600">Bahan Baku</span>
                 </a>
                 <a href="#" class="flex flex-col items-center p-2 hover:bg-gray-50 rounded-lg">
-                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
-                        <i class="fas fa-cogs text-purple-500"></i>
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-cogs text-blue-500"></i>
                     </div>
                     <span class="text-sm text-gray-600">Mesin</span>
                 </a>
@@ -103,7 +103,7 @@
         <div class="bg-white rounded-lg shadow p-6 mb-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold">Flash Sale</h2>
-                <a href="#" class="text-purple-700 hover:text-purple-800">Lihat Semua</a>
+                <a href="#" class="text-blue-700 hover:text-blue-800">Lihat Semua</a>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 @if(isset($flashSaleProducts))
@@ -124,7 +124,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="w-full bg-purple-700 text-white py-2 px-4 rounded hover:bg-purple-800">
+                            <button type="submit" class="w-full bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800">
                                 Tambah ke Keranjang
                             </button>
                         </form>
@@ -151,7 +151,7 @@
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="w-full bg-purple-700 text-white py-2 px-4 rounded hover:bg-purple-800">
+                            <button type="submit" class="w-full bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800">
                                 Tambah ke Keranjang
                             </button>
                         </form>
@@ -169,17 +169,17 @@
                 <div>
                     <h3 class="font-semibold mb-4">Layanan Pelanggan</h3>
                     <ul class="space-y-2 text-gray-600">
-                        <li><a href="#" class="hover:text-purple-700">Bantuan</a></li>
-                        <li><a href="#" class="hover:text-purple-700">Cara Pembelian</a></li>
-                        <li><a href="#" class="hover:text-purple-700">Pengiriman</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Bantuan</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Cara Pembelian</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Pengiriman</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="font-semibold mb-4">Tentang Kami</h3>
                     <ul class="space-y-2 text-gray-600">
-                        <li><a href="#" class="hover:text-purple-700">Tentang</a></li>
-                        <li><a href="#" class="hover:text-purple-700">Karir</a></li>
-                        <li><a href="#" class="hover:text-purple-700">Blog</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Tentang</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Karir</a></li>
+                        <li><a href="#" class="hover:text-blue-700">Blog</a></li>
                     </ul>
                 </div>
                 <!-- Add more footer sections as needed -->
