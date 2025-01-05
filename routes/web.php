@@ -150,7 +150,10 @@ Route::prefix('inventory')->middleware(['auth'])->group(function () {
             ->name('documents.destroy');
 });
 
-Route::delete('/api/products/{id}', [AdminController::class, 'deleteProduct']);
+Route::put('/api/products/{id}', [AdminController::class, 'updateProduct'])->name('products.update');
+
+Route::delete('/api/users/{id}', [AdminController::class, 'deleteUser'])->name('users.delete');
+
 
 
 
