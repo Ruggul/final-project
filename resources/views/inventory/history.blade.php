@@ -46,7 +46,7 @@
                     <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
                 </button>
                 <div x-show="open" class="bg-gray-700">
-                    <a href="{{ route('inventory.index') }}" 
+                    <a href="{{ route('documents.index') }}" 
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
                         <i class="fas fa-file-alt mr-3"></i>Document List
                     </a>

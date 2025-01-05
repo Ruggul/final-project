@@ -1,90 +1,87 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-6 py-8">
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold">Create New Document</h2>
-            <a href="{{ route('documents.index') }}" class="text-gray-600 hover:text-gray-800">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Tambah Dokumen Baru</h5>
+                <a href="{{ route('documents.index') }}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </a>
+            </div>
+
+            <div class="card-body">
+                <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <!-- Tipe Dokumen -->
+                    <div class="mb-3">
+                        <label for="document_type" class="form-label">Tipe Dokumen</label>
+                        <input type="text" 
+                               class="form-control @error('document_type') is-invalid @enderror" 
+                               id="document_type" 
+                               name="document_type" 
+                               value="{{ old('document_type') }}" 
+                               required>
+                        @error('document_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Nama Dokumen -->
+                    <div class="mb-3">
+                        <label for="document_name" class="form-label">Nama Dokumen</label>
+                        <input type="text" 
+                               class="form-control @error('document_name') is-invalid @enderror" 
+                               id="document_name" 
+                               name="document_name" 
+                               value="{{ old('document_name') }}" 
+                               required>
+                        @error('document_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="mb-3">
+                        <label for="file" class="form-label">File Dokumen</label>
+                        <input type="file" 
+                               class="form-control @error('file') is-invalid @enderror" 
+                               id="file" 
+                               name="file" 
+                               required>
+                        <div class="form-text">Format yang diperbolehkan: PDF, DOC, DOCX, JPG, JPEG, PNG (maksimal 2MB)</div>
+                        @error('file')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Tanggal Kadaluarsa -->
+                    <div class="mb-3">
+                        <label for="expiry_date" class="form-label">Tanggal Kadaluarsa (Opsional)</label>
+                        <input type="date" 
+                               class="form-control @error('expiry_date') is-invalid @enderror" 
+                               id="expiry_date" 
+                               name="expiry_date" 
+                               value="{{ old('expiry_date') }}">
+                        @error('expiry_date')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Tombol Submit -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ route('documents.index') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Batal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Simpan Dokumen
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        @if ($errors->any())
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-red-700">
-                            Please fix the following errors:
-                        </p>
-                        <ul class="mt-2 text-sm text-red-700">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-        <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            
-            <div class="space-y-6">
-                <!-- Document Type -->
-                <div>
-                    <label for="document_type" class="block text-sm font-medium text-gray-700">Document Type</label>
-                    <select name="document_type" id="document_type" 
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Select Document Type</option>
-                        <option value="SOP">Standard Operating Procedure</option>
-                        <option value="Manual">Manual Book</option>
-                        <option value="Report">Report Document</option>
-                        <option value="Form">Form Document</option>
-                        <option value="Other">Other Document</option>
-                    </select>
-                </div>
-
-                <!-- Document Name -->
-                <div>
-                    <label for="document_name" class="block text-sm font-medium text-gray-700">Document Name</label>
-                    <input type="text" name="document_name" id="document_name" 
-                           value="{{ old('document_name') }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-
-                <!-- Document File -->
-                <div>
-                    <label for="document_file" class="block text-sm font-medium text-gray-700">Document File</label>
-                    <input type="file" name="document_file" id="document_file" 
-                           class="mt-1 block w-full text-sm text-gray-500
-                                  file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
-                                  file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700
-                                  hover:file:bg-blue-100">
-                    <p class="mt-1 text-xs text-gray-500">Accepted formats: PDF, DOC, DOCX, JPG, JPEG, PNG (max 2MB)</p>
-                </div>
-
-                <!-- Expiry Date -->
-                <div>
-                    <label for="expiry_date" class="block text-sm font-medium text-gray-700">Expiry Date</label>
-                    <input type="date" name="expiry_date" id="expiry_date" 
-                           value="{{ old('expiry_date') }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                </div>
-
-                <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <button type="submit" 
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:border-blue-800 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
-                        <i class="fas fa-save mr-2"></i>
-                        Save Document
-                    </button>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
 @endsection

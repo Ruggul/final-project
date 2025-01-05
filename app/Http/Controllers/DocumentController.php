@@ -5,170 +5,113 @@ namespace App\Http\Controllers;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
     /**
-     * Display a listing of the documents.
+     * Menampilkan daftar dokumen
      */
     public function index()
     {
         $documents = Document::latest()->paginate(10);
-        return view('user.userAccount.document', compact('documents'));
+        return view('documents.index', compact('documents'));
     }
 
     /**
-     * Show the form for creating a new document.
+     * Menampilkan form untuk membuat dokumen baru
      */
     public function create()
     {
-        $documentTypes = [
-            'SOP' => 'Standard Operating Procedure',
-            'Manual' => 'Manual Book',
-            'Report' => 'Report Document',
-            'Form' => 'Form Document',
-            'Other' => 'Other Document'
-        ];
-        return view('user.userAccount.document-create', compact('documentTypes'));
+        return view('Documents.create');
     }
 
     /**
-     * Store a newly created document in storage.
+     * Menyimpan dokumen baru ke database
      */
     public function store(Request $request)
     {
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
-            'expiry_date' => 'nullable|date|after:today',
+            'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date'
         ]);
 
-        try {
-            // Generate unique filename
-            $fileName = time() . '_' . Str::slug($request->document_name) . '.' . 
-                       $request->file('document_file')->getClientOriginalExtension();
+        $file = $request->file('file');
+        $path = $file->store('documents', 'public');
 
-            // Handle file upload
-            $filePath = $request->file('document_file')->storeAs(
-                'documents',
-                $fileName,
-                'public'
-            );
+        Document::create([
+            'document_type' => $request->document_type,
+            'document_name' => $request->document_name,
+            'file_path' => $path,
+            'expiry_date' => $request->expiry_date
+        ]);
 
-            // Create document record
-            Document::create([
-                'document_type' => $request->document_type,
-                'document_name' => $request->document_name,
-                'file_path' => $filePath,
-                'expiry_date' => $request->expiry_date,
-            ]);
-
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document berhasil diunggah.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal mengunggah dokumen.')
-                        ->withInput();
-        }
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified document.
+     * Menampilkan detail dokumen
      */
     public function show(Document $document)
     {
-        if (!Storage::disk('public')->exists($document->file_path)) {
-            return back()->with('error', 'File dokumen tidak ditemukan.');
-        }
-
-        return view('user.userAccount.document-show', compact('document'));
+        return view('documents.show', compact('document'));
     }
 
     /**
-     * Show the form for editing the specified document.
+     * Menampilkan form untuk mengedit dokumen
      */
     public function edit(Document $document)
     {
-        $documentTypes = [
-            'SOP' => 'Standard Operating Procedure',
-            'Manual' => 'Manual Book',
-            'Report' => 'Report Document',
-            'Form' => 'Form Document',
-            'Other' => 'Other Document'
-        ];
-        return view('user.userAccount.document-edit', compact('document', 'documentTypes'));
+        return view('documents.edit', compact('document'));
     }
 
     /**
-     * Update the specified document in storage.
+     * Mengupdate dokumen di database
      */
     public function update(Request $request, Document $document)
     {
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
-            'expiry_date' => 'nullable|date|after:today',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date'
         ]);
 
-        try {
-            $updateData = [
-                'document_type' => $request->document_type,
-                'document_name' => $request->document_name,
-                'expiry_date' => $request->expiry_date,
-            ];
+        $data = [
+            'document_type' => $request->document_type,
+            'document_name' => $request->document_name,
+            'expiry_date' => $request->expiry_date
+        ];
 
-            // Handle file upload if new file is provided
-            if ($request->hasFile('document_file')) {
-                // Delete old file
-                if (Storage::disk('public')->exists($document->file_path)) {
-                    Storage::disk('public')->delete($document->file_path);
-                }
-                
-                // Generate unique filename
-                $fileName = time() . '_' . Str::slug($request->document_name) . '.' . 
-                           $request->file('document_file')->getClientOriginalExtension();
-
-                // Store new file
-                $filePath = $request->file('document_file')->storeAs(
-                    'documents',
-                    $fileName,
-                    'public'
-                );
-
-                $updateData['file_path'] = $filePath;
-            }
-
-            // Update document record
-            $document->update($updateData);
-
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document berhasil diperbarui.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal memperbarui dokumen.')
-                        ->withInput();
+        if ($request->hasFile('file')) {
+            // Hapus file lama
+            Storage::disk('public')->delete($document->file_path);
+            
+            // Upload file baru
+            $file = $request->file('file');
+            $data['file_path'] = $file->store('documents', 'public');
         }
+
+        $document->update($data);
+
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified document from storage.
+     * Menghapus dokumen dari database
      */
     public function destroy(Document $document)
     {
-        try {
-            // Delete file from storage
-            if (Storage::disk('public')->exists($document->file_path)) {
-                Storage::disk('public')->delete($document->file_path);
-            }
-            
-            // Delete document record
-            $document->delete();
+        // Hapus file fisik
+        Storage::disk('public')->delete($document->file_path);
+        
+        // Hapus record dari database
+        $document->delete();
 
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document berhasil dihapus.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal menghapus dokumen.');
-        }
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil dihapus.');
     }
 }
