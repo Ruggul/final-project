@@ -8,7 +8,6 @@
                 <th class="px-6 py-3 text-left">Stok</th>
                 <th class="px-6 py-3 text-left">Satuan</th>
                 <th class="px-6 py-3 text-left">Harga Satuan</th>
-                <th class="px-6 py-3 text-left">Lokasi</th>
                 <th class="px-6 py-3 text-left">Aksi</th>
             </tr>
         </thead>
@@ -26,9 +25,9 @@
                         <td class="px-6 py-4">{{ $product->stok }}</td>
                         <td class="px-6 py-4">{{ $product->satuan }}</td>
                         <td class="px-6 py-4">Rp {{ number_format($product->harga_satuan) }}</td>
-                        <td class="px-6 py-4">{{ $product->lokasi }}</td>
                         <td class="px-6 py-4">
-                            <div class="flex space-x-2">
+                            <div class="flex items-center space-x-2">
+                                <span class="mr-2">{{ $product->lokasi }}</span>
                                 <button onclick="openEditModal({
                                     id: '{{ $product->id }}',
                                     kode_barang: '{{ $product->kode_barang }}',
@@ -51,7 +50,7 @@
                 @endforeach
             @else
                 <tr>
-                    <td colspan="8" class="px-6 py-4 text-center">Tidak ada data produk</td>
+                    <td colspan="7" class="px-6 py-4 text-center">Tidak ada data produk</td>
                 </tr>
             @endif
         </tbody>
