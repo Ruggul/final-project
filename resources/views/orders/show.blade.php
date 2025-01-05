@@ -70,11 +70,15 @@
                 </table>
             </div>
 
-            <!-- Tombol Kembali -->
-            <div class="text-center">
+            <!-- Tombol -->
+            <div class="flex justify-center space-x-4">
                 <a href="{{ url('/redirect') }}" 
-                   class="inline-block bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
+                   class="inline-block bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
                     Kembali ke Home
+                </a>
+                <a href="{{ route('payments.checkout', ['order_id' => $order->id]) }}" 
+                   class="inline-block bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800">
+                    Bayar Sekarang
                 </a>
             </div>
         </div>

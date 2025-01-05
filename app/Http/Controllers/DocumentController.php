@@ -9,122 +9,109 @@ use Illuminate\Support\Facades\Storage;
 class DocumentController extends Controller
 {
     /**
-     * Display a listing of the documents.
+     * Menampilkan daftar dokumen
      */
     public function index()
     {
-        $documents = Document::latest()->get();
-        return view('user.userAccount.document', compact('documents'));
+        $documents = Document::latest()->paginate(10);
+        return view('documents.index', compact('documents'));
     }
 
     /**
-     * Show the form for creating a new document.
+     * Menampilkan form untuk membuat dokumen baru
      */
     public function create()
     {
-        return view('user.userAccount.document-create');
+        return view('Documents.create');
     }
 
     /**
-     * Store a newly created document in storage.
+     * Menyimpan dokumen baru ke database
      */
     public function store(Request $request)
     {
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'expiry_date' => 'nullable|date|after:today',
+            'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date'
         ]);
 
-        try {
-            // Handle file upload
-            $filePath = $request->file('document_file')->store('documents', 'public');
+        $file = $request->file('file');
+        $path = $file->store('documents', 'public');
 
-            // Create document record
-            Document::create([
-                'document_type' => $request->document_type,
-                'document_name' => $request->document_name,
-                'file_path' => $filePath,
-                'expiry_date' => $request->expiry_date,
-            ]);
+        Document::create([
+            'document_type' => $request->document_type,
+            'document_name' => $request->document_name,
+            'file_path' => $path,
+            'expiry_date' => $request->expiry_date
+        ]);
 
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document uploaded successfully.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to upload document. Please try again.');
-        }
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil ditambahkan.');
     }
 
     /**
-     * Display the specified document.
+     * Menampilkan detail dokumen
      */
     public function show(Document $document)
     {
-        return view('user.userAccount.document-show', compact('document'));
+        return view('documents.show', compact('document'));
     }
 
     /**
-     * Show the form for editing the specified document.
+     * Menampilkan form untuk mengedit dokumen
      */
     public function edit(Document $document)
     {
-        return view('user.userAccount.document-edit', compact('document'));
+        return view('documents.edit', compact('document'));
     }
 
     /**
-     * Update the specified document in storage.
+     * Mengupdate dokumen di database
      */
     public function update(Request $request, Document $document)
     {
         $request->validate([
             'document_type' => 'required|string|max:255',
             'document_name' => 'required|string|max:255',
-            'document_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'expiry_date' => 'nullable|date|after:today',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'expiry_date' => 'nullable|date'
         ]);
 
-        try {
-            // Handle file upload if new file is provided
-            if ($request->hasFile('document_file')) {
-                // Delete old file
-                Storage::disk('public')->delete($document->file_path);
-                
-                // Store new file
-                $filePath = $request->file('document_file')->store('documents', 'public');
-                $document->file_path = $filePath;
-            }
+        $data = [
+            'document_type' => $request->document_type,
+            'document_name' => $request->document_name,
+            'expiry_date' => $request->expiry_date
+        ];
 
-            // Update document record
-            $document->update([
-                'document_type' => $request->document_type,
-                'document_name' => $request->document_name,
-                'expiry_date' => $request->expiry_date,
-            ]);
-
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document updated successfully.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to update document. Please try again.');
+        if ($request->hasFile('file')) {
+            // Hapus file lama
+            Storage::disk('public')->delete($document->file_path);
+            
+            // Upload file baru
+            $file = $request->file('file');
+            $data['file_path'] = $file->store('documents', 'public');
         }
+
+        $document->update($data);
+
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil diperbarui.');
     }
 
     /**
-     * Remove the specified document from storage.
+     * Menghapus dokumen dari database
      */
     public function destroy(Document $document)
     {
-        try {
-            // Delete file from storage
-            Storage::disk('public')->delete($document->file_path);
-            
-            // Delete document record
-            $document->delete();
+        // Hapus file fisik
+        Storage::disk('public')->delete($document->file_path);
+        
+        // Hapus record dari database
+        $document->delete();
 
-            return redirect()->route('documents.index')
-                           ->with('success', 'Document deleted successfully.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Failed to delete document. Please try again.');
-        }
+        return redirect()->route('documents.index')
+            ->with('success', 'Dokumen berhasil dihapus.');
     }
 }

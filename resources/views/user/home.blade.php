@@ -6,6 +6,7 @@
     <title>Homepage</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <
@@ -31,9 +32,47 @@
                 <a href="#" class="hover:text-gray-200">
                     <i class="fas fa-bell text-xl"></i>
                 </a>
-                <a href="#" class="hover:text-gray-200">
-                    <i class="fas fa-user text-xl"></i>
-                </a>
+                <!-- User Profile Dropdown -->
+                <div class="relative" x-data="{ isOpen: false }">
+                    <button @click="isOpen = !isOpen" 
+                            type="button"
+                            class="hover:text-gray-200 focus:outline-none">
+                        <i class="fas fa-user text-xl"></i>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="isOpen" 
+                         @click.outside="isOpen = false"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
+                         style="display: none;">
+                        <!-- Profile -->
+                        <a href="{{ route('profile.show') }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-user-circle mr-2"></i>Profile
+                        </a>
+
+                        <!-- TopUp -->
+                        <a href="{{ route('topups.create') }}" 
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-wallet mr-2"></i>TopUp
+                        </a>
+
+                        <!-- Logout -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" 
+                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

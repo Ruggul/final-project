@@ -7,8 +7,8 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\Admin\LastLoginController;
-
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\FactoryUserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,17 +74,19 @@ Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.rem
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 Route::get('/orders/{order}', [CartController::class, 'showOrder'])->name('orders.show');
+Route::get('/checkout/{order_id}', [App\Http\Controllers\PaymentController::class, 'checkout'])->name('payments.checkout');
+Route::post('/payments/process', [App\Http\Controllers\PaymentController::class, 'process'])->name('payments.process');
+Route::get('/payments/{payment}', [App\Http\Controllers\PaymentController::class, 'show'])->name('payments.show');
 
 // hasan
-Route::prefix('inventory')->group(function () {
+Route::prefix('inventory')->middleware(['auth'])->group(function () {
     Route::get('/', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/search', [InventoryController::class, 'search'])->name('inventory.search');
-    Route::post('/', [InventoryController::class, 'tambahBarang'])->name('inventory.store');
+    Route::get('/create', [InventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/', [InventoryController::class, 'store'])->name('inventory.store');
     Route::get('/{item}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
     Route::put('/{item}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/{item}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-    Route::post('/{item}/masuk', [InventoryController::class, 'barangMasuk'])->name('inventory.masuk');
-    Route::post('/{item}/keluar', [InventoryController::class, 'barangKeluar'])->name('inventory.keluar');
+    Route::get('/history', [InventoryController::class, 'history'])->name('inventory.history');
 });
 
 //iky
@@ -109,6 +111,9 @@ Route::prefix('inventory')->group(function () {
 
         // Verify payment
         Route::post('/{topup}/verify', [TopUpController::class, 'verify'])->name('topups.verify');
+
+        // Show topup history
+        Route::get('/history', [TopUpController::class, 'history'])->name('topups.history');
 });
 
 //kevin
@@ -144,7 +149,7 @@ Route::prefix('inventory')->group(function () {
             ->name('documents.destroy');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/last-login', [LastLoginController::class, 'index'])->name('admin.last-login');
-});
+
+
+
 

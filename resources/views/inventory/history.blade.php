@@ -9,30 +9,8 @@
         </div>
 
         <nav class="py-5">
-            <!-- Factory Account Menu -->
-            <div x-data="{ open: false }">
-                <button @click="open = !open" 
-                        class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
-                    <span class="flex items-center">
-                        <i class="fas fa-users mr-3"></i>
-                        Factory Account
-                    </span>
-                    <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
-                </button>
-                <div x-show="open" class="bg-gray-700">
-                    <a href="{{ route('factoryUser.index') }}" 
-                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
-                        <i class="fas fa-list mr-3"></i>List Users
-                    </a>
-                    <a href="{{ route('factoryUser.create') }}" 
-                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
-                        <i class="fas fa-plus mr-3"></i>Add User
-                    </a>
-                </div>
-            </div>
-
             <!-- Inventory Management Menu -->
-            <div x-data="{ open: false }">
+            <div x-data="{ open: true }">
                 <button @click="open = !open" 
                         class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
                     <span class="flex items-center">
@@ -42,13 +20,43 @@
                     <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
                 </button>
                 <div x-show="open" class="bg-gray-700">
-                    <a href="#inventory-list" 
+                    <a href="{{ route('inventory.index') }}" 
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
                         <i class="fas fa-list mr-3"></i>Stock List
                     </a>
-                    <a href="#stock-movement" 
+                    <a href="{{ route('inventory.create') }}" 
                        class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
-                        <i class="fas fa-exchange-alt mr-3"></i>Stock Movement
+                        <i class="fas fa-plus mr-3"></i>Add Item
+                    </a>
+                    <a href="{{ route('inventory.history') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600 bg-gray-600">
+                        <i class="fas fa-history mr-3"></i>Stock History
+                    </a>
+                </div>
+            </div>
+
+            <!-- Document Menu -->
+            <div x-data="{ open: false }">
+                <button @click="open = !open" 
+                        class="w-full flex items-center justify-between text-gray-100 px-6 py-3 hover:bg-gray-700">
+                    <span class="flex items-center">
+                        <i class="fas fa-file-invoice fa-lg mr-3"></i>
+                        Documents
+                    </span>
+                    <i class="fas" :class="{ 'fa-chevron-down': !open, 'fa-chevron-up': open }"></i>
+                </button>
+                <div x-show="open" class="bg-gray-700">
+                    <a href="{{ route('documents.index') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-file-alt mr-3"></i>Document List
+                    </a>
+                    <a href="{{ route('documents.create') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-file-medical mr-3"></i>Add Document
+                    </a>
+                    <a href="{{ route('documents.history') }}" 
+                       class="flex items-center text-gray-100 px-8 py-2 hover:bg-gray-600">
+                        <i class="fas fa-history mr-3"></i>Document History
                     </a>
                 </div>
             </div>
@@ -58,17 +66,17 @@
     <!-- Main Content -->
     <div class="ml-64 flex-1 flex flex-col overflow-hidden">
         <!-- Header -->
-        <header class="bg-white shadow-md py-4 px-6">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-semibold">Factory Dashboard</h2>
+        <header class="bg-white shadow-md">
+            <div class="flex justify-between items-center py-4 px-6">
+                <h2 class="text-xl font-semibold">Stock History</h2>
                 <div class="flex items-center space-x-4">
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="flex items-center space-x-2">
-                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name=Admin' }}" 
-                                 class="h-8 w-8 rounded-full">
-                            <span>{{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" 
+                                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </header>
@@ -76,9 +84,11 @@
         <!-- Main Content Area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
             <div class="container mx-auto px-6 py-8">
-                @livewire('factory-dashboard')
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <!-- ... rest of the history content ... -->
+                </div>
             </div>
         </main>
     </div>
 </div>
-@endsection
+@endsection 

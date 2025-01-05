@@ -2,108 +2,117 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TopUp;
 use Illuminate\Http\Request;
+use App\Models\TopUp;
+use Illuminate\Support\Facades\Auth;
 
 class TopUpController extends Controller
 {
-    /**
-     * Display a listing of topups.
-     */
     public function index()
     {
-        $topups = TopUp::where('user_id', auth()->id())
-                       ->latest()
-                       ->paginate(10);
-
-        return view('user.topup', compact('topups'));
+        $topups = TopUp::where('user_id', Auth::id())
+                       ->orderBy('created_at', 'desc')
+                       ->get();
+        return view('topups.index', compact('topups'));
     }
 
-    /**
-     * Show the form for creating a new topup.
-     */
     public function create()
     {
-        return view('user.topup-create');
+        try {
+            // Mengambil data user yang sedang login
+            $user = Auth::user();
+            
+            // Mengambil riwayat topup user
+            $topups = TopUp::where('user_id', $user->id)
+                          ->orderBy('created_at', 'desc')
+                          ->take(5)
+                          ->get();
+
+            // Mengambil saldo user saat ini
+            $currentBalance = $user->balance;
+
+            // Return view dengan data yang diperlukan
+            return view('user.topup', [
+                'user' => $user,
+                'topups' => $topups,
+                'currentBalance' => $currentBalance
+            ]);
+
+        } catch (\Exception $e) {
+            // Log error jika terjadi masalah
+            \Log::error('Error in TopUpController@create: ' . $e->getMessage());
+            
+            // Redirect dengan pesan error
+            return redirect()->back()
+                           ->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
+        }
     }
 
-    /**
-     * Store a newly created topup.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'payment_method' => 'required|in:bank_transfer,credit_card,e-wallet',
+            'amount' => 'required|numeric|min:10000',
+            'payment_method' => 'required|in:e_wallet,bank_transfer,cash', // Sesuaikan dengan opsi valid
         ]);
-
-        $topup = TopUp::create([
-            'user_id' => auth()->id(),
-            'transaction_number' => 'TU' . time() . rand(1000, 9999),
-            'amount' => $request->amount,
-            'payment_method' => $request->payment_method,
-            'status' => 'pending',
-        ]);
-
-        return redirect()->route('topups.show', $topup)
-                        ->with('success', 'Top up request created successfully.');
+    
+        // Tambahkan logging untuk debugging
+        \Log::info('Payment Method: ' . $request->payment_method);
+        \Log::info('Amount: ' . $request->amount);
+    
+        try {
+            // Simpan data ke database
+            TopUp::create([
+                'user_id' => auth()->id(),
+                'amount' => $request->amount,
+                'payment_method' => $request->payment_method,
+                'status' => 'pending',
+            ]);
+    
+            return redirect()->back()->with('success', 'Top-up berhasil!');
+        } catch (\Exception $e) {
+            \Log::error('Error in TopUpController@store: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
+        }
     }
+    
 
-    /**
-     * Display the specified topup.
-     */
     public function show(TopUp $topup)
     {
-        // Ensure user can only see their own topups
-        if ($topup->user_id !== auth()->id()) {
+        if ($topup->user_id !== Auth::id()) {
             abort(403);
         }
 
-        return view('user.topup-show', compact('topup'));
+        return view('topups.show', compact('topup'));
     }
 
-    /**
-     * Cancel a pending topup.
-     */
+    public function verify(TopUp $topup)
+    {
+        $topup->update(['status' => 'success']);
+
+        $user = Auth::user();
+        $user->balance += $topup->amount;
+        $user->save();
+
+        return redirect()->route('topups.show', $topup)
+                        ->with('success', 'Pembayaran berhasil diverifikasi.');
+    }
+
     public function cancel(TopUp $topup)
     {
-        // Ensure user can only cancel their own pending topups
-        if ($topup->user_id !== auth()->id() || $topup->status !== 'pending') {
-            abort(403);
+        if ($topup->status === 'pending') {
+            $topup->update(['status' => 'cancelled']);
         }
 
-        $topup->update([
-            'status' => 'cancelled',
-        ]);
-
         return redirect()->route('topups.index')
-                        ->with('success', 'Top up cancelled successfully.');
+                        ->with('success', 'TopUp dibatalkan.');
     }
 
-    /**
-     * Verify payment for a topup.
-     */
-    public function verify(Request $request, TopUp $topup)
+    public function history()
     {
-        // Ensure user can only verify their own pending topups
-        if ($topup->user_id !== auth()->id() || $topup->status !== 'pending') {
-            abort(403);
-        }
-
-        $request->validate([
-            'payment_proof' => 'required|image|max:2048',
-        ]);
-
-        // Handle payment proof upload
-        $path = $request->file('payment_proof')->store('payment_proofs', 'public');
-
-        $topup->update([
-            'payment_proof' => $path,
-            'status' => 'verifying',
-            'payment_date' => now(),
-        ]);
-
-        return redirect()->route('topups.index')
-                        ->with('success', 'Payment proof submitted successfully.');
+        // Jika Anda memiliki model untuk history pergerakan stok
+        // $movements = StockMovement::with('item')->latest()->paginate(10);
+        // return view('inventory.history', compact('movements'));
+        
+        return view('topups.history');
     }
 }
